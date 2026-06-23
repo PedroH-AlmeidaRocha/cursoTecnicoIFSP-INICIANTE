@@ -1,0 +1,253 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background: #6c9eea;
+
+    display: flex;
+    flex-direction: column; 
+    min-height: 100vh;      
+    align-items: center;
+}
+
+h1 {
+   background-color: #ffffff;
+    text-align: center;
+    margin-top: 40px;      
+    margin-bottom: 25px;
+    color: #000000;
+    width: 25%;    
+    border-radius: 12px;  
+    padding: 10px;     
+     border: 5px solid black;
+}
+
+
+h3{ 
+    
+color: #6c9eea;
+ font-size: 15px;  
+      
+
+}
+
+table {
+    width: 90%;
+    max-width: 1000px;  
+    margin: 30px auto;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+th {
+    background-color: #0c1320;
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-size: 18px;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Pinta uma linha sim e outra não */
+tr:nth-child(even) {
+
+    /* Cor de fundo das linhas pares */
+    background-color: #f5f7fa;
+}
+
+tr:hover {
+    background-color: #e8efff;
+}
+
+/* Coluna da sinopse O número 3 significa "terceiro filho".
+
+Em uma tabela, cada coluna é considerada um filho da linha (tr).*/
+td:nth-child(3) {
+
+    /* Largura máxima da terceira coluna */
+    max-width: 400px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #000000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+}
+
+
+button:hover {
+    background: #00de00;
+}
+
+
+@media (max-width: 500px) {
+    form {
+        padding: 25px 20px;
+    }
+}
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    background: #ffffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    border: 5px solid black;
+    box-shadow: 0 8px 25px #587feb14;
+    width: 100%;
+    max-width: 400px;
+    margin: auto; 
+}
+
+
+label {
+    text-align: center;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #34495e;
+}
+
+
+input {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 18px;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+input:focus {
+    border-color: #000000;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
+}
+
+textarea{
+     resize: none;
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 18px;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;  
+   
+}
+
+select{
+ width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 18px;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+
+}
+
+.btn-voltar{
+    display: inline-block;
+
+    background-color: #4a76d1;
+    color: white;
+
+    padding: 12px 20px;
+
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+
+    border-radius: 8px;
+
+    margin: 20px;
+
+    transition: 0.3s;
+}
+
+.btn-voltar:hover{
+    background-color: #365db0;
+    transform: scale(1.05);
+}
+.sem-livros{
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    gap: 20px;              
+
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    border: 5px solid black;
+
+    width: fit-content;
+    margin: 100px auto;
+}
+.com-livros{
+ display: inline-block;
+
+  
+    color: white;
+
+    padding: 12px 20px;
+
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+
+    border-radius: 8px;
+
+    margin: 20px;
+
+    transition: 0.3s;
+
+}
+
+.btn-voltar2{
+    display: inline-block;
+
+    background-color: #000000;
+    color: white;
+
+    padding: 12px 20px;
+
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+
+    border-radius: 8px;
+
+    margin: 20px;
+
+    transition: 0.3s;
+}
+.btn-voltar2:hover{
+    background-color: #34363a;
+    transform: scale(1.05);
+}

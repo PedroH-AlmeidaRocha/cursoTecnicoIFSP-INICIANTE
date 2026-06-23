@@ -1,0 +1,155 @@
+/*1. Crie uma VIEW chamada vw_vendas_funcionario que junte a tabela compra com a tabela
+funcionario, e tenha como colunas o id_compra, id_funcionario, o nome do funcionário, o valor da
+compra e o status de finalizada.*/
+
+CREATE OR REPLACE VIEW vw_vendas_funcionario AS
+SELECT f.id_funcionario AS id_funcionario,
+	   c.id_compra AS id_compra,
+	   f.nome AS nome_funcionario,
+	   c.valor AS valor,
+	   c.finalizada AS status
+FROM funcionario f
+JOIN compra c 
+	ON c.id_funcionario = f.id_funcionario
+GROUP BY f.id_funcionario,
+	   c.id_compra,
+	   f.nome,
+	   c.valor,
+	   c.finalizada;
+
+SELECT * FROM vw_vendas_funcionario;
+
+/*2. Crie uma FUNCTION chamada func_faturamento_caixa(p_id_funcionario INT) que consulte a
+VIEW vw_vendas_funcionario (do exercício 1), some o valor das vendas finalizadas desse
+funcionário e retorne o total acumulado.*/
+
+CREATE OR REPLACE FUNCTION func_faturamento_caixa(
+p_id_funcionario INTEGER
+)
+RETURNS NUMERIC
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	soma_total NUMERIC;
+BEGIN
+	SELECT  COALESCE(SUM(valor), 0) INTO soma_total FROM vw_vendas_funcionario
+	WHERE p_id_funcionario = id_funcionario;
+
+	RETURN soma_total;
+
+END;
+$$;
+
+
+SELECT func_faturamento_caixa(9);
+
+/*3 - Contexto: O gerente do mercado quer saber se um operador de caixa atingiu a meta mínima de
+faturamento do dia (por exemplo, R$ 100,00). Ele quer uma procedure que faça essa verificação de
+forma segura.
+Crie a PROCEDURE proc_verificar_meta_caixa(p_id_funcionario INT, p_meta_valor NUMERIC)
+que:
+• chame a func_faturamento_caixa (do exercício 2) para descobrir o faturamento atual do
+funcionário e guarde o resultado em uma variável;
+◦ se o faturamento do funcionário for maior ou igual à meta (p_meta_valor), exiba a
+mensagem: "Meta atingida com sucesso!";
+◦ senão, exiba a mensagem: "Aviso: Meta não alcançada pelo funcionário.*/
+
+CREATE OR REPLACE PROCEDURE proc_verificar_meta_caixa(
+    p_id_funcionario INT, 
+    p_meta_valor NUMERIC
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_faturamento_atual NUMERIC;
+BEGIN
+   
+    v_faturamento_atual := func_faturamento_caixa(p_id_funcionario);
+
+
+    IF v_faturamento_atual >= p_meta_valor THEN
+        RAISE NOTICE 'Meta atingida com sucesso! Faturamento: R$ %', v_faturamento_atual;
+    ELSE 
+        RAISE NOTICE 'Aviso: Meta não alcançada pelo funcionário. Faturamento: R$ %', v_faturamento_atual;
+    END IF;
+END;
+$$;
+
+
+CALL proc_verificar_meta_caixa(9, 100.00);
+
+/* 4 - Crie uma VIEW chamada vw_produtos_proximos_vencimento que tenha como colunas o
+id_produto, id_categoria, nome do produto, quantidade (dê um alias – AS estoque_atual),
+data_validade, valor_unitario e uma coluna com alias custo_total_estoque que seja quantidade ×
+valor_unitario da tabela produto. Deve projetar apenas os produtos que vencem nos próximos 30 dias
+(dica: utilize CURRENT_DATE para “data de hoje” e INTERVAL ‘30 days’ para “30 dias”).*/
+CREATE OR REPLACE VIEW vw_produtos_proximos_vencimento AS
+SELECT 
+    p.id_produto, 
+    p.id_categoria, 
+    c.tipo, 
+    p.nome, 
+    p.quantidade AS estoque_atual, 
+    p.data_validade, 
+    p.valor_unitario, 
+    (p.quantidade * p.valor_unitario) AS custo_total_estoque
+FROM produto p
+JOIN categoria c ON p.id_categoria = c.id_categoria -- JOIN para pegar o nome
+WHERE p.data_validade BETWEEN CURRENT_DATE AND (CURRENT_DATE + INTERVAL '30 days');
+
+
+select * from vw_produtos_proximos_vencimento;
+
+rever:
+/*5. Crie uma FUNCTION chamada func_calcular_risco_prejuizo(p_id_produto INT). Esta função
+vai:
+• ler a VIEW vw_produtos_proximos_vencimento (do exercício 4);
+• pega o custo_total_estoque e o id_categoria para verificar o percentual de risco de perda:
+◦ caso a categoria seja ‘Panificação’, ‘Padaria’, ‘Frios’ ou ‘Embutidos’ então o percentual
+de risco é de 60% de perda;
+◦ caso a categoria seja ‘Bebidas’, ‘Cervejas’, ‘Vinhos’, ‘Café’ e ‘Enlatados’ então o
+percentual de risco é de 10% de perda;
+◦ caso seja outra categoria não citada anteriormente, o risco de perda é de 30%; 
+• retorne o valor em reais (NUMERIC) da perda estimada.*/
+CREATE OR REPLACE FUNCTION func_calcular_risco_prejuizo(p_id_produto INT)
+RETURNS NUMERIC
+LANGUAGE plpgsql
+AS
+$$
+DECLARE
+    v_custo_total NUMERIC;
+    v_nome_categoria VARCHAR;
+    v_percentual_risco NUMERIC;
+    v_perda_estimada NUMERIC;
+BEGIN
+
+    SELECT custo_total_estoque, tipo
+    INTO v_custo_total, v_nome_categoria
+    FROM vw_produtos_proximos_vencimento
+    WHERE id_produto = p_id_produto;
+
+    IF NOT FOUND THEN
+        RETURN 0;
+    END IF;
+
+    CASE
+        WHEN v_nome_categoria IN ('Panificação', 'Padaria', 'Frios', 'Embutidos') THEN
+            v_percentual_risco := 0.60;
+
+        WHEN v_nome_categoria IN ('Bebidas', 'Cervejas', 'Vinhos', 'Café', 'Enlatados') THEN
+            v_percentual_risco := 0.10;
+
+        ELSE
+            v_percentual_risco := 0.30;
+    END CASE;
+
+    v_perda_estimada := v_custo_total * v_percentual_risco;
+
+    RETURN v_perda_estimada;
+END;
+$$;
+
+SELECT func_calcular_risco_prejuizo(40);
+
+--Nome: Pedro Henrique de Almeida Rocha, INI3
+   

@@ -1,0 +1,225 @@
+--1
+CREATE VIEW vw_qtd_clientes_tipo_endereco AS
+SELECT 
+    tp.tipo AS tipo_endereco,
+    COUNT(c.id_cliente) AS quantidade_clientes
+FROM cliente c
+JOIN endereco e 
+    ON e.id_endereco = c.id_endereco
+JOIN tipo_endereco tp 
+    ON tp.id_tipo_endereco = e.id_tipo_endereco
+GROUP BY tp.tipo;
+
+select * from vw_qtd_clientes_tipo_endereco;
+
+
+--2
+
+CREATE VIEW  vw_avg_funcionarios_departamento AS
+SELECT d.nome AS departamento,
+       AVG(f.salario) AS media_salarial
+FROM Funcionario f
+JOIN departamento_funcionario df ON f.id_funcionario = df.id_funcionario
+JOIN departamento d ON df.id_departamento = d.id_departamento
+GROUP BY d.nome;
+
+select * from   vw_avg_funcionarios_departamento;
+
+--3
+
+CREATE VIEW  vw_listar_funcionarios AS
+SELECT s.nome AS supervisor, f.nome as funcionarios
+FROM supervisor s
+LEFT JOIN funcionario f on f.id_supervisor = s.id_supervisor
+GROUP BY s.nome,f.nome;
+
+
+select * from vw_listar_funcionarios;
+
+--4  
+CREATE VIEW  vw_listar_compras_funcionarios AS
+SELECT c.nome AS cliente, it.valor_total AS total
+FROM cliente C
+JOIN compra on compra.id_cliente = c.id_cliente
+JOIN item_compra it ON it.id_compra = compra.id_compra
+GROUP BY c.nome,it.valor_total;
+
+select * from  vw_listar_compras_funcionarios;
+
+
+--5 
+CREATE VIEW  vw_listar_fornecedores_e_produtos AS
+SELECT p.nome AS produto, f.nome AS fornecedores
+FROM produto p
+RIGHT JOIN fornecedor f on f.id_fornecedor = p.id_fornecedor
+GROUP BY p.nome, f.nome;
+
+select * from  vw_listar_fornecedores_e_produtos;
+
+--6
+CREATE VIEW  vw_listar_funcionarios_com_dependentes AS
+SELECT f.nome AS funcionario, d.nome AS dependentes
+FROM  funcionario f
+INNER JOIN dependente d on d.id_funcionario = f.id_funcionario
+GROUP BY f.nome, d.nome;
+
+SELECT * FROM vw_listar_funcionarios_com_dependentes;
+
+--7 
+
+CREATE VIEW vw_listar_funcionarios AS
+SELECT nome FROM cliente
+UNION
+SELECT nome from funcionario;
+
+SELECT * FROM vw_listar_funcionarios;
+
+--8  
+
+CREATE VIEW vw_contar_produtos_por_categoria AS
+SELECT c.tipo AS categoria,
+COUNT(p.id_produto) AS quantidade_produtos
+FROM categoria c
+JOIN produto p on p.id_categoria = c.id_categoria
+GROUP BY c.tipo;
+
+SELECT * FROM vw_contar_produtos_por_categoria;
+
+--9 
+
+CREATE VIEW vw_listar_funcionarios_admitidos AS
+SELECT nome 
+FROM funcionario
+WHERE data_contratacao BETWEEN to_date(current_setting('var.ini'),'YYYY-MM-DD') AND to_date(current_setting('var.fim'),'YYYY-MM-DD');
+
+SET var.ini = '2023-01-01';
+SET var.fim = '2023-12-31';
+SELECT  * FROM vw_listar_funcionarios_admitidos;
+
+--10
+
+CREATE VIEW vw_calculo_total_compras_por_pagamentos AS
+SELECT forma_pagamento,
+SUM (valor) AS total_compras
+FROM compra
+GROUP BY forma_pagamento;
+
+SELECT * FROM  vw_calculo_total_compras_por_pagamentos;
+--11
+
+CREATE VIEW vw_listar_funcionarios_possuem_salario_sup_media AS
+SELECT f.nome  AS nome_funcionario, d.nome AS nome_departamento, f.salario
+
+FROM funcionario f
+
+JOIN supervisor s ON f.id_supervisor = s.id_supervisor
+JOIN departamento d ON s.id_departamento = d.id_departamento
+WHERE f.salario > (SELECT AVG(salario) FROM funcionario); 
+
+SELECT * FROM  vw_listar_funcionarios_possuem_salario_sup_media;
+
+--12
+
+CREATE VIEW vw_listar_clientes_sem_compra AS
+SELECT c.id_cliente, c.nome AS nome_cliente
+FROM cliente c
+LEFT JOIN compra co on co.id_cliente = c.id_cliente
+WHERE co.id_compra IS NULL;
+
+SELECT * FROM  vw_listar_clientes_sem_compra ORDER BY id_cliente asc; 
+
+--13 
+
+
+CREATE VIEW vw_apresentar_funcionarios_por_sexo AS
+SELECT f.sexo AS sexo, 
+COUNT(f.id_funcionario) AS quantidade_funcionarios
+FROM funcionario f
+group by f.sexo;
+
+SELECT * FROM vw_apresentar_funcionarios_por_sexo;
+
+--14
+
+CREATE VIEW vw_listar_valor_unitario_sup_50 AS
+SELECT p.valor_unitario AS valor, p.id_produto
+FROM produto p
+WHERE p.valor_unitario < 50;
+
+SELECT * FROM vw_listar_valor_unitario_sup_50;
+
+--15
+CREATE VIEW vw_dependentes_por_parentesco AS
+
+SELECT nome, parentesco
+FROM dependente
+WHERE parentesco = 'Filho'
+
+UNION ALL
+
+SELECT nome, 'Outro' AS parentesco
+FROM dependente
+WHERE parentesco <> 'Filho';
+
+
+SELECT * FROM vw_dependentes_por_parentesco;
+
+--16
+
+CREATE VIEW vw_listar_bairros_com_mais_de_5_enderecos_cadastradados AS
+SELECT b.nome, COUNT(e.id_endereco) AS total_enderecos
+FROM bairro b
+JOIN endereco e ON e.id_bairro = b.id_bairro
+GROUP BY b.nome
+HAVING COUNT(e.id_endereco) > 5;
+
+SELECT * FROM vw_listar_bairros_com_mais_de_5_enderecos_cadastradados;
+
+--17
+
+CREATE VIEW vw_calcular_media_itens_por_compras_realizadas AS
+SELECT c.id_compra,
+AVG(it.valor_total) AS media
+FROM compra c
+JOIN item_compra it ON it.id_compra = c.id_compra
+GROUP BY c.id_compra;
+
+SELECT * FROM vw_calcular_media_itens_por_compras_realizadas; 
+
+--18
+CREATE VIEW vw_listar_demitidos_e_ativos AS
+
+SELECT nome, 'Ativo' AS status
+FROM funcionario
+WHERE demissao IS NULL
+
+UNION
+
+SELECT nome, 'Demitido' AS status
+FROM funcionario
+WHERE demissao IS NOT NULL;
+
+
+SELECT * FROM vw_listar_demitidos_e_ativos; 
+
+--19 
+CREATE VIEW vw_quantidade_compras_por_mes AS
+SELECT 
+EXTRACT(MONTH FROM data_compra) AS mes,
+COUNT(id_compra) AS quantidade_compras
+FROM compra
+GROUP BY EXTRACT(MONTH FROM data_compra);
+
+SELECT * FROM vw_quantidade_compras_por_mes ORDER BY mes asc;
+
+--20 
+
+CREATE VIEW vw_listar_funcionarios_e_total_dependentes AS
+SELECT f.nome, COUNT(d.id_dependente) AS numeros_dependentes
+FROM funcionario f
+LEFT JOIN dependente d ON d.id_funcionario = f.id_funcionario
+GROUP BY f.nome;
+
+SELECT * FROM vw_listar_funcionarios_e_total_dependentes;
+
+--Pedro Henrique de Almeida Rocha INI3

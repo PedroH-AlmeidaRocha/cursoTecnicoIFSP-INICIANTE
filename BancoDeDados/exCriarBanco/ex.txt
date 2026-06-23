@@ -1,0 +1,589 @@
+CREATE TABLE Estado (
+    uf VARCHAR(2) PRIMARY KEY,
+    nome VARCHAR(20)
+);
+
+
+CREATE TABLE Cidade (
+    id_cidade INTEGER PRIMARY KEY,
+    uf VARCHAR(2),
+    nome VARCHAR(75)
+);
+
+
+CREATE TABLE Bairro (
+    id_bairro INTEGER PRIMARY KEY,
+    id_cidade INTEGER,
+    nome VARCHAR(75),
+    CONSTRAINT fk_bairro_cidade FOREIGN KEY (id_cidade) REFERENCES Cidade(id_cidade)
+);
+
+
+CREATE TABLE TipoEndereco (
+    id_tipo_endereco INTEGER PRIMARY KEY,
+    tipo VARCHAR(30)
+);
+
+
+CREATE TABLE Endereco (
+    id_endereco INTEGER PRIMARY KEY,
+    id_tipo_endereco INTEGER,
+    id_bairro INTEGER,
+    nome VARCHAR(100),
+    numero VARCHAR(10),
+    cep VARCHAR(10),
+    CONSTRAINT fk_endereco_tipo FOREIGN KEY (id_tipo_endereco) REFERENCES TipoEndereco(id_tipo_endereco),
+    CONSTRAINT fk_endereco_bairro FOREIGN KEY (id_bairro) REFERENCES Bairro(id_bairro)
+);
+
+
+CREATE TABLE Fornecedor (
+    id_fornecedor INTEGER PRIMARY KEY,
+    id_endereco INTEGER,
+    nome VARCHAR(45),
+    CONSTRAINT fk_fornecedor_endereco FOREIGN KEY (id_endereco) REFERENCES Endereco(id_endereco)
+);
+
+
+CREATE TABLE Categoria (
+    id_categoria INTEGER PRIMARY KEY,
+    tipo VARCHAR(45)
+);
+
+
+CREATE TABLE Produto (
+    id_produto INTEGER PRIMARY KEY,
+    id_fornecedor INTEGER,
+    id_categoria INTEGER,
+    nome VARCHAR(45),
+    quantidade INTEGER,
+    valor_unitario NUMERIC(5,2),
+    data_validade DATE,
+    CONSTRAINT fk_produto_fornecedor FOREIGN KEY (id_fornecedor) REFERENCES Fornecedor(id_fornecedor),
+    CONSTRAINT fk_produto_categoria FOREIGN KEY (id_categoria) REFERENCES Categoria(id_categoria)
+);
+
+
+CREATE TABLE Cliente (
+    id_cliente INTEGER PRIMARY KEY,
+    id_endereco INTEGER,
+    nome VARCHAR(75),
+    sexo VARCHAR(1),
+    data_nascimento DATE,
+    CONSTRAINT fk_cliente_endereco FOREIGN KEY (id_endereco) REFERENCES Endereco(id_endereco)
+);
+
+
+CREATE TABLE Departamento (
+    id_departamento INTEGER PRIMARY KEY,
+    nome VARCHAR(45)
+);
+
+
+CREATE TABLE Supervisor (
+    id_supervisor INTEGER PRIMARY KEY,
+    id_departamento INTEGER,
+    nome VARCHAR(75),
+    CONSTRAINT fk_supervisor_departamento FOREIGN KEY (id_departamento) REFERENCES Departamento(id_departamento)
+);
+
+
+CREATE TABLE Funcionario (
+    id_funcionario INTEGER PRIMARY KEY,
+    id_endereco INTEGER,
+    id_supervisor INTEGER,
+    nome VARCHAR(50),
+    data_nascimento DATE,
+    sexo VARCHAR(1),
+    data_contratacao DATE,
+    data_demissao DATE,
+    demissao VARCHAR(2),
+    salario NUMERIC(5,2),
+    CONSTRAINT fk_funcionario_endereco FOREIGN KEY (id_endereco) REFERENCES Endereco(id_endereco),
+    CONSTRAINT fk_funcionario_supervisor FOREIGN KEY (id_supervisor) REFERENCES Supervisor(id_supervisor)
+);
+
+
+CREATE TABLE Dependente (
+    id_dependente INTEGER PRIMARY KEY,
+    id_funcionario INTEGER,
+    nome VARCHAR(50),
+    parentesco VARCHAR(45),
+    sexo VARCHAR(1),
+    data_nascimento DATE,
+    CONSTRAINT fk_dependente_funcionario FOREIGN KEY (id_funcionario) REFERENCES Funcionario(id_funcionario)
+);
+
+
+CREATE TABLE Departamento_Funcionario (
+    id_depart_func INTEGER PRIMARY KEY,
+    id_funcionario INTEGER,
+    id_departamento INTEGER,
+    data_entrada DATE,
+    data_saida DATE,
+    CONSTRAINT fk_depart_func_funcionario FOREIGN KEY (id_funcionario) REFERENCES Funcionario(id_funcionario),
+    CONSTRAINT fk_depart_func_departamento FOREIGN KEY (id_departamento) REFERENCES Departamento(id_departamento)
+);
+
+
+CREATE TABLE Telefone (
+    id_telefone INTEGER PRIMARY KEY,
+    id_cliente INTEGER,
+    id_funcionario INTEGER,
+    numero VARCHAR(14),
+    CONSTRAINT fk_telefone_cliente FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),
+    CONSTRAINT fk_telefone_funcionario FOREIGN KEY (id_funcionario) REFERENCES Funcionario(id_funcionario)
+);
+
+
+CREATE TABLE Compra (
+    id_compra INTEGER PRIMARY KEY,
+    id_cliente INTEGER,
+    id_funcionario INTEGER,
+    data_compra DATE,
+    valor NUMERIC(5,2),
+    forma_pagamento VARCHAR(15),
+    finalizada VARCHAR(1),
+    CONSTRAINT fk_compra_cliente FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),
+    CONSTRAINT fk_compra_funcionario FOREIGN KEY (id_funcionario) REFERENCES Funcionario(id_funcionario)
+);
+
+
+CREATE TABLE Item_Compra (
+    id_compra INTEGER,
+    id_produto INTEGER,
+    quantidade INTEGER,
+    valor_total NUMERIC,
+    PRIMARY KEY (id_compra, id_produto),
+    CONSTRAINT fk_item_compra FOREIGN KEY (id_compra) REFERENCES Compra(id_compra),
+    CONSTRAINT fk_item_produto FOREIGN KEY (id_produto) REFERENCES Produto(id_produto)
+);
+
+
+INSERT INTO Estado (uf,nome) VALUES
+ ('AC', 'Acre'), 
+ ('AL', 'Alagoas'),
+ ('AP', 'Amapá'), 
+ ('AM', 'Amazonas'),
+ ('BA', 'Bahia'), 
+ ('CE', 'Ceará'),
+ ('DF', 'Distrito Federal*'),
+ ('ES', 'Espirito Santo'), 
+ ('GO', 'Goiás'),
+ ('MA', 'Maranhão'), 
+ ('MT', 'Mato Grosso'),
+ ('MS', 'Mato Grosso do Sul'), 
+ ('MG', 'Minas Gerais'),
+ ('PA', 'Pará'), 
+ ('PB', 'Paraíba'),
+ ('PR', 'Paraná'),
+ ('PE', 'Pernambuco'), 
+ ('PI', 'Piauí'),
+ ('RJ', 'Rio de Janeiro'),
+ ('RN', 'Rio Grande do Norte'), 
+ ('RS', 'Rio Grande do Sul'),
+ ('RO', 'Rondônia'),
+ ('RR', 'Roraima'), 
+ ('SC', 'Santa Catarina'),
+ ('SP', 'São Paulo'),
+ ('SE', 'Sergipe'),
+ ('TO', 'Tocantins');
+
+INSERT INTO Cidade VALUES
+ ('1', 'AC', 'Rio branco'), 
+ ('2', 'AC', 'Cruzeiro do Sul'),
+ ('3', 'AL', 'Maceió'),
+ ('4', 'AL', 'Arapiraca'), 
+ ('5', 'AP', 'Macapá'),
+ ('6', 'AP', 'Santana'),
+ ('7', 'AM', 'Manaus'), 
+ ('8', 'AM', 'Itacoatiara'),
+ ('9', 'BA', 'Salvador'),
+ ('10', 'BA', 'Xique-Xique'), 
+ ('11', 'CE', 'Fortaleza'),
+ ('12', 'CE', 'Caucaia'),
+ ('13', 'ES', 'Vitória'),
+ ('14', 'ES', 'Serra'),
+ ('15', 'GO', 'Goiânia '), 
+ ('16', 'GO', 'Aparecida de Goiânia'),
+ ('17', 'MA', 'São Luís'),
+ ('18', 'MA', 'Açailândia'),
+ ('19', 'MT', 'Cuiabá'),
+ ('20', 'MT', 'Várzea Grande'),
+ ('21', 'MS', 'Campo Grande'), 
+ ('22', 'MS', 'Dourados'),
+ ('23', 'MG', 'Belo Horizonte'),
+ ('24', 'MG', 'Monsenhor Paulo'),
+ ('25', 'PA', 'Belém'),
+ ('26', 'PA', 'Santarém'),
+ ('27', 'PB', 'João Pessoa'), 
+ ('28', 'PB', 'Água Branca'),
+ ('29', 'PR', 'Curitiba'),
+ ('30', 'PR', 'Londrina'),
+ ('31', 'PE', 'Recife'),
+ ('32', 'PE', 'Petrolina'),
+ ('33', 'PI', 'Teresina'), 
+ ('34', 'PI', 'Assunção do Piauí'),
+ ('35', 'RJ', 'Rio de Janeiro'),
+ ('36', 'RJ', 'Duque de Caxias'),
+ ('37', 'RN', 'Natal'),
+ ('38', 'RN', 'Mossoró'),
+ ('39', 'RS', 'Porto Alegre'), 
+ ('40', 'RS', 'Canoas'),
+ ('41', 'RO', 'Porto Velho'),
+ ('42', 'RO', 'São Miguel do Guaporé'),
+ ('43', 'RR', 'Boa Vista'),
+ ('44', 'RR', 'Rorainópolis'),
+ ('45', 'SC', 'Florianópolis'), 
+ ('46', 'SC', 'Águas de Chapecó'),
+ ('47', 'SP', 'São Paulo'),
+ ('48', 'SP', 'Campinas'),
+ ('49', 'SE', 'Aracaju'),
+ ('50', 'SE', 'Nossa Senhora do Socorro'),
+ ('51', 'TO', 'Palmas'), 
+ ('52', 'TO', 'Paraíso do Tocantins');
+
+INSERT INTO Bairro VALUES
+ ('1', '1', 'Planalto'),
+ ('2', '1', 'Jardim Glória'),
+ ('3', '2', 'Bairro Novo'),
+ ('4', '2', 'Jardim Eldorado'),
+ ('5', '3', 'Ponta Verde'),
+ ('6', '3', 'Jaraguá'),
+ ('7', '4', 'Planalto'),
+ ('8', '4', 'Nova Arapiraca'),
+ ('9', '5', 'Buritizal'),
+ ('10', '5', 'Jardim das Oliveiras'),
+ ('11', '6', 'Cidade Nova'),
+ ('12', '6', 'Jardim Europa'),
+ ('13', '7', 'Adrianópolis'),
+ ('14', '7', 'São Jorge'),
+ ('15', '8', 'Vila da Barra'),
+ ('16', '8', 'Bairro das Pedras'),
+ ('17', '9', 'Barra'),
+ ('18', '9', 'Vale dos Reis'),
+ ('19', '10', 'Pioneiros'),
+ ('20', '10', 'São Miguel'),
+ ('21', '11', 'Aldeota'),
+ ('22', '11', 'Messejana'),
+ ('23', '12', 'Caucaia'),
+ ('24', '12', 'Jardim Ceará'),
+ ('25', '13', 'Santa Lucia'),
+ ('26', '13', 'Jardim da Penha'),
+ ('27', '14', 'Jardim Limoeiro'),
+ ('28', '14', 'Morada do Sol'),
+ ('29', '15', 'Setor Bueno'),
+ ('30', '15', 'Jardim Goiás'),
+ ('31', '16', 'Vila Brasília'),
+ ('32', '16', 'Jardim América'),
+ ('33', '17', 'Anil'),
+ ('34', '17', 'Vila Nova'),
+ ('35', '18', 'Vila São Luís'),
+ ('36', '18', 'Açailândia'),
+ ('37', '19', 'Jardim Imperial'),
+ ('38', '19', 'Parque Universitário'),
+ ('39', '20', 'Várzea Grande'),
+ ('40', '20', 'Jardim Aeroporto'),
+ ('41', '21', 'Parque dos Poderes'),
+ ('42', '21', 'Jardim Botânico'),
+ ('43', '22', 'Jardim Maracanã'),
+ ('44', '22', 'Parque do Lago'),
+ ('45', '23', 'Savassi'),
+ ('46', '23', 'Lourdes'),
+ ('47', '24', 'Jardim São Paulo'),
+ ('48', '24', 'Crispim'),
+ ('49', '25', 'Belém Velho'),
+ ('50', '25', 'São Brás'),
+ ('51', '26', 'Praça Nova'),
+ ('52', '26', 'Alvorada'),
+ ('53', '27', 'Torre'),
+ ('54', '27', 'Treze de Maio'),
+ ('55', '28', 'Estação'),
+ ('56', '28', 'Nazaré'),
+ ('57', '29', 'Água Verde'),
+ ('58', '29', 'Jardim das Américas'),
+ ('59', '30', 'Vila Ipiranga'),
+ ('60', '30', 'Jardim de Alá'),
+ ('61', '31', 'São José'),
+ ('62', '31', 'Cais do Sertão'),
+ ('63', '32', 'Nova Petrolina'),
+ ('64', '32', 'Jardim das Flores'),
+ ('65', '33', 'São Pedro'),
+ ('66', '33', 'Vila Nova'),
+ ('67', '34', 'Bairro Novo'),
+ ('68', '34', 'Praça da Paz'),
+ ('69', '35', 'Copacabana'),
+ ('70', '35', 'Lapa'),
+ ('71', '36', 'Parque Niterói'),
+ ('72', '36', 'Bela Vista'),
+ ('73', '37', 'Neópolis'),
+ ('74', '37', 'São José'),
+ ('75', '38', 'Alto de São Manuel'),
+ ('76', '38', 'Mossoró'),
+ ('77', '39', 'Cidade Baixa'),
+ ('78', '39', 'Rio Branco'),
+ ('79', '40', 'Niterói'),
+ ('80', '40', 'Jardim das Acácias'),
+ ('81', '41', 'Nova Porto Velho'),
+ ('82', '41', 'Santa Bárbara'),
+ ('83', '42', 'Jardim Eldorado'),
+ ('84', '42', 'Floresta'),
+ ('85', '43', 'Parque Santa Luzia'),
+ ('86', '43', 'Boa Vista'),
+ ('87', '44', 'Jardim Vitória'),
+ ('88', '44', 'Rorainópolis'),
+ ('89', '45', 'Estreito'),
+ ('90', '45', 'Jardim Atlântico'),
+ ('91', '46', 'São Carlos'),
+ ('92', '46', 'Chapecó'),
+ ('93', '47', 'Centro'),
+ ('94', '47', 'Liberdade'),
+ ('95', '48', 'Cambuí'),
+ ('96', '48', 'Vila Jardim'),
+ ('97', '49', 'São Conrado'),
+ ('98', '49', 'Atalaia'),
+ ('99', '50', 'Santos Dumont'),
+ ('100', '50', 'Novo Horizonte'),
+ ('101', '51', 'Setor de Indústria'),
+ ('102', '51', 'Parque das Flores'),
+ ('103', '52', 'São José'),
+ ('104', '52', 'Alvorada');
+ 
+INSERT INTO TipoEndereco VALUES
+
+ ('1', 'Rua'),
+ ('2', 'Avenida'),
+ ('3', 'Estrada'),
+ ('4', 'Praça'),
+ ('5', 'Alameda'),
+ ('6', 'Beco'),
+ ('7', 'Travessa'),
+ ('8', 'Viela'),
+ ('9', 'Rodovia'),
+ ('10', 'Casa'),
+ ('11', 'Apartamento'),
+ ('12', 'Sobrado'),
+ ('13', 'Aeroporto'),
+ ('14', 'Condominio'),
+ ('15', 'Vila'),
+ ('16', 'Trevo'),
+ ('17', 'Distrito'),
+ ('18', 'Favela'),
+ ('19', 'Ladeira'),
+ ('20', 'Passarela');
+
+INSERT INTO Endereco VALUES
+ (1, 1, 1, 'Rua das Palmeiras', '101', '01001-010'),
+ (2, 2, 2, 'Avenida Central', '202', '01002-020'),
+ (3, 3, 3, 'Estrada das Rosas', '303', '01003-030'),
+ (4, 4, 4, 'Praça das Orquídeas', '404', '01004-040'),
+ (5, 5, 5, 'Alameda dos Pinheiros', '505', '01005-050'),
+ (6, 6, 6, 'Beco Primavera', '606', '01006-060'),
+ (7, 7, 7, 'Travessa do Sol', '707', '01007-070'),
+ (8, 8, 8, 'Viela Beira-Mar', '808', '01008-080'),
+ (9, 9, 9, 'Rodovia do Campo', '909', '01009-090'),
+ (10, 10, 10, 'Casa do Mar', '1010', '01010-100'),
+ (11, 11, 11, 'Apartamento Nova Esperança', '1111', '01011-110'),
+ (12, 12, 12, 'Sobrado dos Trabalhadores', '1212', '01012-120'),
+ (13, 13, 13, 'Aeroporto das Acácias', '1313', '01013-130'),
+ (14, 14, 14, 'Condomínio do Bosque', '1414', '01014-140'),
+ (15, 15, 15, 'Vila do Comércio', '1515', '01015-150'),
+ (16, 16, 16, 'Trevo das Indústrias', '1616', '01016-160'),
+ (17, 17, 17, 'Distrito do Lago', '1717', '01017-170'),
+ (18, 18, 18, 'Favela do Vale', '1818', '01018-180'),
+ (19, 19, 19, 'Ladeira dos Pioneiros', '1919', '01019-190'),
+ (20, 20, 20, 'Fazenda São Miguel', '2020', '01020-200'),
+ (21, 1, 21, 'Rua Aldeota', '2121', '01021-210'),
+ (22, 2, 22, 'Avenida Messejana', '2222', '01022-220'),
+ (23, 3, 23, 'Estrada Caucaia', '2323', '01023-230'),
+ (24, 4, 24, 'Praça Jardim Ceará', '2424', '01024-240'),
+ (25, 5, 25, 'Alameda Santa Lucia', '2525', '01025-250'),
+ (26, 6, 26, 'Beco Jardim da Penha', '2626', '01026-260'),
+ (27, 7, 27, 'Travessa Jardim Limoeiro', '2727', '01027-280'),
+ (28, 8, 28, 'Viela Morada do Sol', '2828', '01028-290'),
+ (29, 9, 29, 'Rodovia Setor Bueno', '2929', '01029-300'),
+ (30, 10, 30, 'Casa Jardim Goiás', '3030', '01030-310'),
+ (31, 11, 31, 'Apartamento Vila Brasília', '3131', '01031-320'),
+ (32, 12, 32, 'Sobrado Jardim América', '3232', '01032-330'),
+ (33, 13, 33, 'Aeroporto Anil', '3333', '01033-340'),
+ (34, 14, 34, 'Condomínio Fé em Deus', '3434', '01034-350'),
+ (35, 15, 35, 'Vila São Luís', '3535', '01035-360'),
+ (36, 16, 36, 'Trevo Açailândia', '3636', '01036-370'),
+ (37, 17, 37, 'Distrito Jardim Imperial', '3737', '01037-380'),
+ (38, 18, 38, 'Favela Parque Universitário', '3838', '01038-390'),
+ (39, 19, 39, 'Ladeira Várzea Grande', '3939', '01039-400'),
+ (40, 20, 40, 'Fazenda Jardim Aeroporto', '4040', '01040-410'),
+ (41, 1, 41, 'Rua Parque dos Poderes', '4141', '01041-420'),
+ (42, 2, 42, 'Avenida Jardim Botânico', '4242', '01042-430'),
+ (43, 3, 43, 'Estrada Jardim Maracanã', '4343', '01043-440'),
+ (44, 4, 44, 'Praça Parque do Lago', '4444', '01044-450'),
+ (45, 5, 45, 'Alameda Savassi', '4545', '01045-460'),
+ (46, 6, 46, 'Beco Lourdes', '4646', '01046-470'),
+ (47, 7, 47, 'Travessa Jardim São Paulo', '4747', '01047-480'),
+ (48, 8, 48, 'Viela Crispim', '4848', '01048-490'),
+ (49, 9, 49, 'Rodovia Belém Velho', '4949', '01049-500'),
+ (50, 10, 50, 'Casa São Brás', '5050', '01050-510'),
+ (51, 11, 51, 'Apartamento Praça Nova', '5151', '01051-520'),
+ (52, 12, 52, 'Sobrado Alvorada', '5252', '01052-530'),
+ (53, 13, 53, 'Aeroporto Torre', '5353', '01053-540'),
+ (54, 14, 54, 'Condomínio Treze de Maio', '5454', '01054-550'),
+ (55, 15, 55, 'Vila Estação', '5555', '01055-560'),
+ (56, 16, 56, 'Trevo Nazaré', '5656', '01056-570'),
+ (57, 17, 57, 'Distrito Água Verde', '5757', '01057-580'),
+ (58, 18, 58, 'Favela Jardim das Américas', '5858', '01058-590'),
+ (59, 19, 59, 'Ladeira Vila Ipiranga', '5959', '01059-600'),
+ (60, 20, 60, 'Fazenda Jardim de Alá', '6060', '01060-610'),
+ (61, 1, 61, 'Rua São José', '6161', '01061-620'),
+ (62, 2, 62, 'Avenida Cais do Sertão', '6262', '01062-630'),
+ (63, 3, 63, 'Estrada Nova Petrolina', '6363', '01063-640'),
+ (64, 4, 64, 'Praça Jardim das Flores', '6464', '01064-650'),
+ (65, 5, 65, 'Alameda São Pedro', '6565', '01065-660'),
+ (66, 6, 66, 'Beco Vila Nova', '6666', '01066-670'),
+ (67, 7, 67, 'Travessa Bairro Novo', '6767', '01067-680'),
+ (68, 8, 68, 'Viela Praça da Paz', '6868', '01068-690'),
+ (69, 9, 69, 'Rodovia Copacabana', '6969', '01069-700'),
+ (70, 10, 70, 'Casa Lapa', '7070', '01070-710'),
+ (71, 11, 71, 'Apartamento Parque Niterói', '7171', '01071-720'),
+ (72, 12, 72, 'Sobrado Bela Vista', '7272', '01072-730'),
+ (73, 13, 73, 'Aeroporto Neópolis', '7373', '01073-740'),
+ (74, 14, 74, 'Condomínio São José', '7474', '01074-750'),
+ (75, 15, 75, 'Vila Alto de São Manuel', '7575', '01075-760'),
+ (76, 16, 76, 'Trevo Mossoró', '7676', '01076-770'),
+ (77, 17, 77, 'Distrito Cidade Baixa', '7777', '01077-780'),
+ (78, 18, 78, 'Favela Rio Branco', '7878', '01078-790'),
+ (79, 19, 79, 'Ladeira Niterói', '7979', '01079-800'),
+ (80, 20, 80, 'Fazenda Jardim das Acácias', '8080', '01080-810'),
+ (81, 1, 81, 'Rua Nova Porto Velho', '8181', '01081-820'),
+ (82, 2, 82, 'Avenida Santa Bárbara', '8282', '01082-830'),
+ (83, 3, 83, 'Estrada Jardim Eldorado', '8383', '01083-840'),
+ (84, 4, 84, 'Praça Floresta', '8484', '01084-850'),
+ (85, 5, 85, 'Alameda Parque Santa Luzia', '8585', '01085-860'),
+ (86, 6, 86, 'Beco Boa Vista', '8686', '01086-870'),
+ (87, 7, 87, 'Travessa Jardim Vitória', '8787', '01087-880'),
+ (88, 8, 88, 'Viela Rorainópolis', '8888', '01088-890'),
+ (89, 9, 89, 'Rodovia Estreito', '8989', '01089-900'),
+ (90, 10, 90, 'Casa Jardim Atlântico', '9090', '01090-910'),
+ (91, 11, 91, 'Apartamento São Carlos', '9191', '01091-920'),
+ (92, 12, 92, 'Sobrado Chapecó', '9292', '01092-930'),
+ (93, 13, 93, 'Aeroporto Vila Mariana', '9393', '01093-940'),
+ (94, 14, 94, 'Condomínio Liberdade', '9494', '01094-950'),
+ (95, 15, 95, 'Vila Cambuí', '9595', '01095-960'),
+ (96, 16, 96, 'Trevo Vila Jardim', '9696', '01096-970'),
+ (97, 17, 97, 'Distrito São Conrado', '9797', '01097-980'),
+ (98, 18, 98, 'Favela Atalaia', '9898', '01098-990'),
+ (99, 19, 99, 'Ladeira Santos Dumont', '9999', '01099-100'),
+ (100, 20, 100, 'Fazenda Talismã', '100100', '01100-110'),
+ (101, 1, 101, 'Rua Setor de Indústria', '101101', '01101-120'),
+ (102, 2, 102, 'Avenida Parque das Flores', '102102', '01102-130'),
+ (103, 3, 103, 'Estrada São José', '103103', '01103-140'),
+ (104, 4, 104, 'Praça Alvorada', '104104', '01104-150');
+
+INSERT INTO Fornecedor VALUES
+ (001, 88, 'Memphis'),
+ (002, 87, 'Adega Mabel'),
+ (003, 86, 'Savana Pet'),
+ (004, 85, 'Cescom'),
+ (005, 84, 'Cooxupé'),
+ (006, 83, 'Alô Bebê'),
+ (007, 82, 'Jandaia'),
+ (008, 81, 'Maxi Massas'),
+ (009, 80, 'MB Distribuidora'),
+ (010, 79, 'Rei dos Frios'),
+ (011, 78, 'Cerve-Já'),
+ (012, 77, 'Alimentude'),
+ (013, 76, 'Padovani'),
+ (014, 75, 'Pirespan'),
+ (015, 74, 'Ting'),
+ (016, 73, 'Docile'),
+ (017, 72, '3AB'),
+ (018, 71, 'Hela Spice'),
+ (019, 70, 'Natural Imports'),
+ (020, 69, 'ColdSmoke'),
+ (021, 68, 'Wine Out'),
+ (022, 67, 'Dispan'),
+ (023, 66, 'Campestre'),
+ (024, 65, 'Max Valle');
+
+INSERT INTO Cliente VALUES
+ ('0001', '1','Marcos Souza', 'M', '2005-03-25'),
+ ('0002', '2','Paula Aleixo', 'F', '36'),
+ ('0003', '3','Gisele Fagundes', 'F', '27'),
+ ('0004', '4','Leandro Moura', 'M', '38'),
+ ('0005', '5','Nicolas Queiroz', 'M', '16'),
+ ('0006', '6','Marcela Santos', 'F', '18'),
+ ('0007', '7','Elena Almeida', 'F', '24'),
+ ('0008', '8','Giovanna Oliveira', 'F', '19'),
+ ('0009', '9','Patrick Loures', 'M', '22'),
+ ('0010', '10','Lucas Cunha', 'M', '54'),
+ ('0011', '11','Carlos Vidal', 'M', '62'),
+ ('0012', '12','Livia Barros', 'F', '30'),
+ ('0013', '13','Pedro Mendes', 'M', '16'),
+ ('0014', '14','Juliane Soares', 'F', '45'),
+ ('0015', '15','Eduardo Araujo', 'M', '85'),
+ ('0016', '16','Talita Moreira', 'F', '28'),
+ ('0017', '17','Daniel Teixeira', 'M', '38'),
+ ('0018', '18','Natalia Ferreira', 'F', '50'),
+ ('0019', '19','Vinicius Ribeiro', 'M', '19'),
+ ('0020', '20','Sofia Pires', 'F', '24'),
+ ('0021', '21','Leonardo Nascimento', 'M', '36'),
+ ('0022', '22','Carla Dias', 'F', '43'),
+ ('0023', '23','Gustavo Almeida', 'M', '16'),
+ ('0024', '24','Bianca Carvalho', 'F', '19'),
+ ('0025', '25','André Martins', 'M', '51'),
+ ('0026', '26','Isabela Rocha', 'F', '63'),
+ ('0027', '27','Bruno Ferreira', 'M', '39'),
+ ('0028', '28','Camila Gomes', 'F', '70'),
+ ('0029', '29','Matheus Mendes', 'M', '35'),
+ ('0030', '30','Larissa Boscolo', 'F', '16'),
+ ('0031', '31','Tiago Rodrigues', 'M', '28'),
+ ('0032', '32','Lucca Rios', 'M', '35'),
+ ('0033', '33','Fernanda Lima', 'F', '75'),
+ ('0034', '34','Ana Oliveira', 'F', '20'),
+ ('0035', '35','Ruan Friches', 'M', '16'),
+ ('0036', '36','Vitoria Gonçalves', 'F', '19'),
+ ('0037', '37','Arthur Trindade', 'M', '64'),
+ ('0038', '38','Eduarda Vital', 'F', '38'),
+ ('0039', '39','João Ribeiro', 'M', '19'),
+ ('0040', '40','Elis Regina', 'M', '55'),
+ ('0041', '41', 'Henrique Santos', 'M', '29'),
+ ('0042', '42', 'Amanda Castro', 'F', '34'),
+ ('0043', '43', 'Felipe Mourão', 'M', '40'),
+ ('0044', '44', 'Rafaela Lima', 'F', '22'),
+ ('0045', '45', 'Ivan Martins', 'M', '33'),
+ ('0046', '46', 'Tatiane Alves', 'F', '28'),
+ ('0047', '47', 'Rodrigo Nogueira', 'M', '50'),
+ ('0048', '89', 'Cristina Souza', 'F', '26'),
+ ('0049', '90', 'Alessandro Duarte', 'M', '41'),
+ ('0050', '91', 'Beatriz Fernandes', 'F', '37'),
+ ('0051', '92', 'Otávio Mendes', 'M', '45'),
+ ('0052', '93', 'Juliana Barbosa', 'F', '32'),
+ ('0053', '94', 'Diego Ribeiro', 'M', '39'),
+ ('0054', '95', 'Vanessa Prado', 'F', '27'),
+ ('0055', '96', 'Marcelo Xavier', 'M', '42'),
+ ('0056', '97', 'Elaine Pacheco', 'F', '31'),
+ ('0057', '98', 'Hugo Amaral', 'M', '36'),
+ ('0058', '99', 'Nathalia Costa', 'F', '25'),
+ ('0059', '100', 'Renato Almeida', 'M', '47'),
+ ('0060', '101', 'Aline Torres', 'F', '29'),
+ ('0061', '102', 'Guilherme Fonseca', 'M', '38'),
+ ('0062', '103', 'Bruna Cavalcanti', 'F', '24'),
+ ('0063', '104', 'Fernando Lopes', 'M', '44');
+
+SELECT * FROM Estado;
+SELECT * FROM Cidade;
+SELECT * FROM Bairro;
+SELECT * FROM TipoEndereco;
+SELECT * FROM Endereco;
+SELECT * FROM Fornecedor;
+SELECT * FROM Categoria;
+SELECT * FROM Produto;
+SELECT * FROM Cliente;
+SELECT * FROM Departamento;
+SELECT * FROM Supervisor;
+SELECT * FROM Funcionario;
+SELECT * FROM Dependente;
+SELECT * FROM Departamento_Funcionario;
+SELECT * FROM Telefone;
+SELECT * FROM Compra;
+SELECT * FROM Item_Compra;
+--Pedro Henrique de Almeida Rocha INI2

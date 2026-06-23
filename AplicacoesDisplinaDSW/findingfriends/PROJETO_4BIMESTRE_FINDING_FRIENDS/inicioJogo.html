@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Início</title>
+    <link rel="shortcut icon" href="Imagens/icone_jogo.png">
+    <link rel="stylesheet" href="estiloJogo.css">
+    <script>
+        function iniciarJogo() {
+            window.open("findingFriendsProjeto.html");
+            window.close();
+        }
+        function imprimirTutorial() {
+            alert("1 - O jogo é dividido em três níveis: Fácil, Médio e Difícil.\n2 - Você deve completar os peixes, que são compostos por três quadros.");
+            alert("3 - Porém, tenha cuidado! O tabuleiro apresenta lixos (que te fazem perder 1 vida) e/ou anzóis (que te fazem perder todas as vidas).");
+            alert("4 - O nível Fácil é uma matriz 5X5, com 3 peixes e 3 lixos.\n5 - O nível Médio é uma matriz 7X7, com 3 peixes, 5 lixos e 1 anzol.");
+            alert("6 - O nível Difícil é uma matriz 10X10, com 2 peixes, 6 lixos e 2 anzóis.\n🐟Tenha uma boa aventura!🐟");
+        }
+    </script>
+</head>
+<body>
+    <h1 id="inicio">Finding Friends</h1>
+    <form>
+        <button type="button" onclick="iniciarJogo()" id="play">Play</button>
+        <button type="button" onclick="imprimirTutorial()" id="tutorial">Tutorial</button>
+    </form>
+</body>
+</html>

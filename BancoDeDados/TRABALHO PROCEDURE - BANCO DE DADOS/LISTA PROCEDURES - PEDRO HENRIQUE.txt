@@ -1,0 +1,372 @@
+--Exercício 1 
+CREATE 	OR REPLACE PROCEDURE sp_cidades_pertecentes_estados (
+sp_estado TEXT-- usuario vai digitar
+
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE 
+cidades_nome TEXT;-- variavel local
+BEGIN
+SELECT STRING_AGG(c.nome, ', ' ) INTO cidades_nome FROM cidade c 
+JOIN estado e ON e.uf = c.uf
+WHERE e.nome = sp_estado;
+RAISE NOTICE 'Cidades do estado %: %',sp_estado,cidades_nome;
+END;
+$$;
+
+CALL  sp_cidades_pertecentes_estados('Piauí');
+
+
+--Exercício 2 
+
+CREATE OR REPLACE PROCEDURE sp_quantidade_compras_por_cliente(p_id_cliente INT, OUT v_quantidade_compras INT)
+LANGUAGE plpgsql
+AS $$
+
+  
+BEGIN
+    SELECT COUNT(*) 
+    INTO v_quantidade_compras
+    FROM compra c
+    WHERE c.id_cliente = p_id_cliente;
+END;
+$$;
+CALL  sp_quantidade_compras_por_cliente(0001,NULL);
+
+--Exercício 3
+
+CREATE OR REPLACE PROCEDURE proc_novo_salario(
+    p_id_funcionario INT,            
+    INOUT p_valor NUMERIC            
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- Atualiza o salário somando o valor atual com o valor passado
+    UPDATE funcionario
+    SET salario = salario + p_valor
+    WHERE id_funcionario = p_id_funcionario
+    RETURNING salario INTO p_valor;  -- Aqui o p_valor assume o novo salário
+    
+END;
+$$;
+
+CALL proc_novo_salario(01, 10); 
+
+
+ --Exercício 4 
+
+CREATE OR REPLACE PROCEDURE proc_numero_total_funcionarios (
+    p_id_departamento INT,           --p sifnifica parametro
+    OUT p_total_funcionarios INT    
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN 
+    SELECT COUNT(*)
+    INTO p_total_funcionarios
+    FROM departamento
+    WHERE id_departamento = p_id_departamento;
+END;
+$$;
+
+CALL proc_numero_total_funcionarios(001, NULL); 
+
+-- Exercício 5 
+CREATE OR REPLACE PROCEDURE calcular_desconto(
+    IN p_id_cliente INTEGER,
+    INOUT p_desconto NUMERIC
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    total_compras NUMERIC;
+BEGIN
+ 
+    SELECT SUM(ic.valor_total)
+    INTO total_compras
+    FROM compra c
+    JOIN item_compra ic ON ic.id_compra = c.id_compra
+    WHERE c.id_cliente = p_id_cliente;
+
+   
+    IF total_compras IS NULL THEN
+        total_compras := 0;
+    END IF;
+
+    
+    p_desconto := p_desconto + (total_compras * 0.10);
+END;
+$$;
+
+CALL calcular_desconto(4, 0);
+
+
+
+/* Exercício 6:*/
+
+CREATE OR REPLACE PROCEDURE sp_listar_estoque(
+    IN p_id_produto INT,
+    OUT p_resultado TEXT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE 
+    controle INT;
+BEGIN
+
+    SELECT quantidade 
+    INTO controle 
+    FROM produto
+    WHERE id_produto = p_id_produto;
+
+    IF controle = 0 THEN
+        p_resultado := 'Produto Indisponível';
+
+    ELSIF controle BETWEEN 1 AND 10 THEN
+        p_resultado := 'Estoque Baixo';
+
+    ELSE
+        p_resultado := 'Estoque Disponível';
+    END IF;
+
+END;
+$$;
+
+CALL sp_listar_estoque(001, null);
+
+/*Exercício 7  */
+
+
+CREATE OR REPLACE PROCEDURE sp_faixas_de_precos(
+    IN p_id_produto INT,
+    OUT p_resultado TEXT
+) 
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    controle NUMERIC;
+BEGIN
+    SELECT valor_unitario 
+    INTO controle
+    FROM produto
+    WHERE id_produto = p_id_produto;
+
+    IF controle IS NULL THEN
+        p_resultado := 'Produto não encontrado';
+    ELSE
+        CASE 
+            WHEN controle < 10 THEN 
+                p_resultado := 'Barato';
+
+            WHEN controle >= 10 AND controle < 50 THEN
+                p_resultado := 'Médio';
+
+            ELSE 
+                p_resultado := 'Caro';
+        END CASE;
+    END IF;
+END;
+$$;
+
+CALL sp_faixas_de_precos(001, null);
+
+/*Exercício 8 */
+SELECT set_config('var.pontos', '0', false); --false → significa que ela vale só para a sessão atual, não globalmente
+
+CREATE OR REPLACE PROCEDURE sp_somar_pontos(
+IN soma_pontos int
+)
+LANGUAGE plpgsql
+AS
+$$
+BEGIN
+	
+	PERFORM set_config('var.pontos', -- Serve para executar a função sem retornar resultado 
+	(current_setting('var.pontos')::int + soma_pontos)::text, 
+	false);
+
+RAISE NOTICE 'Pontos somados: % Total: %', soma_pontos, current_setting('var.pontos');
+END;
+$$
+
+CALL sp_somar_pontos(1);
+
+
+/*Exercício 9: */
+CREATE OR REPLACE PROCEDURE sp_contador_ate_n(
+limite INTEGER)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    i INTEGER;
+BEGIN
+  
+    IF limite < 1 THEN
+        RAISE NOTICE 'Por favor, insira um número maior ou igual a 1.';
+    ELSE
+      
+        FOR i IN 1..limite LOOP -- os pontos dizem atpe onde vai
+         
+            RAISE NOTICE 'Contagem: %', i; -- porcentagem diz que vai encaixar o valor de uma variavel dentro de um texto
+        END LOOP;
+    END IF;
+END;
+$$;
+CALL sp_contador_ate_n(5);
+
+/*Exercício 10:*/
+CREATE OR REPLACE PROCEDURE sp_atualizar_status(
+    IN nova_mensagem TEXT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- Se ainda não existe, começa com vazio
+    IF current_setting('var.historico', true) IS NULL THEN
+        PERFORM set_config('var.historico', nova_mensagem, false);
+    ELSE
+        PERFORM set_config(
+            'var.historico',
+            current_setting('var.historico') || ' | ' || nova_mensagem, --2barras vertical concatena
+            false
+        );
+    END IF;
+
+    RAISE NOTICE 'Histórico: %', current_setting('var.historico');
+END;
+$$;
+
+CALL sp_atualizar_status('oi');
+CALL sp_atualizar_status('teste');
+CALL sp_atualizar_status('qualquer coisa');
+
+/*Exercício 11:*/ 
+CREATE OR REPLACE PROCEDURE sp_resumo_cliente(
+    IN p_id_cliente INT,
+    OUT p_resumo TEXT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_nome TEXT;
+    v_data_nasc DATE;
+    v_idade INT;
+BEGIN
+
+    SELECT nome, data_nasc
+    INTO v_nome, v_data_nasc
+    FROM cliente
+    WHERE id_cliente = p_id_cliente;
+
+ 
+    IF v_nome IS NULL THEN
+        p_resumo := 'Cliente não encontrado';
+    ELSE
+ 
+        v_idade := DATE_PART('year', AGE(v_data_nasc));--pega só os anos → idade
+
+        p_resumo := 'Nome: ' || v_nome || ' | Idade: ' || v_idade;
+    END IF;
+END;
+$$;
+CALL sp_resumo_cliente(1, NULL);
+
+/*Exercício 12:*/ 
+CREATE OR REPLACE PROCEDURE sp_imprimir_relatorio(
+    IN p_texto TEXT,
+    IN p_vezes INT,
+    OUT p_resultado TEXT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    contador INT := 0;
+BEGIN
+    p_resultado := '';
+
+    LOOP
+    
+        IF contador >= p_vezes THEN
+            EXIT;
+        END IF;
+
+     
+        p_resultado := p_resultado || p_texto || E'\n';
+
+    
+        contador := contador + 1;
+    END LOOP;
+END;
+$$;
+
+CALL sp_imprimir_relatorio('Linha de teste', 3, NULL);
+
+/*Exercício 13*/
+
+CREATE OR REPLACE PROCEDURE sp_verificar_sexo(
+    IN p_id_cliente INT,
+    OUT p_resultado TEXT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE 
+    v_sexo CHAR(1);
+BEGIN
+
+    SELECT sexo
+    INTO v_sexo
+    FROM cliente
+    WHERE id_cliente = p_id_cliente;
+
+   
+    IF NOT FOUND THEN
+        p_resultado := 'Cliente não encontrado.';
+    ELSE
+    
+        CASE v_sexo
+            WHEN 'M' THEN
+                p_resultado := 'O cliente é do sexo masculino.';
+            WHEN 'F' THEN
+                p_resultado := 'A cliente é do sexo feminino.';
+            ELSE
+                p_resultado := 'Sexo não informado.';
+        END CASE;
+    END IF;
+END;
+$$;
+
+CALL sp_verificar_sexo(1,null);
+
+/*Exercício 14:*/
+
+CREATE OR REPLACE PROCEDURE sp_bonus(
+    IN p_id_compra INT,
+    OUT p_bonus DECIMAL(10,2)
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE 
+    v_valor_compra DECIMAL(10,2);
+BEGIN
+    
+    SELECT SUM(ic.valor_total)
+    INTO v_valor_compra
+    FROM item_compra ic
+    WHERE ic.id_compra = p_id_compra;
+
+
+    IF v_valor_compra > 100 THEN
+        p_bonus := 10.00;
+    ELSE 
+        p_bonus := 0.00;
+    END IF;
+END;
+$$;
+
+
+
+CALL sp_bonus(1,null);
+
+--NOME: Pedro Henrique de Almeida Rocha, TURMA: INI3

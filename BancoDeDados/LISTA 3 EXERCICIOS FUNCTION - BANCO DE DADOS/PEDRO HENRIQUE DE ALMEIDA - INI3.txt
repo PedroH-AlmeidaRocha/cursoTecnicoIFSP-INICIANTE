@@ -1,0 +1,78 @@
+/*1 */
+
+CREATE OR REPLACE FUNCTION func_calcular_subtotal(
+p_qtd INTEGER,
+p_valor_unitario NUMERIC
+) 
+RETURNS NUMERIC
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	RETURN p_qtd  * p_valor_unitario;
+END;
+$$;
+
+SELECT nome, func_calcular_subtotal(quantidade,valor_unitario)
+FROM produto;
+
+/*2*/
+
+CREATE OR REPLACE FUNCTION func_calcular_desconto_progressivo(
+    p_qtd INT, 
+    p_valor_unit NUMERIC
+) 
+RETURNS NUMERIC 
+LANGUAGE plpgsql 
+AS $$ 
+DECLARE 
+    valor_total NUMERIC;
+    valor_final NUMERIC;
+BEGIN 
+   
+    valor_
+	total := p_qtd * p_valor_unit;
+    
+ 
+    IF p_qtd >= 10 THEN 
+        valor_final := valor_total - (valor_total * 0.10); 
+    ELSE 
+        valor_final := valor_total; 
+    END IF;
+    
+
+    RETURN valor_final;
+END; 
+$$;
+
+SELECT nome,func_calcular_desconto_progressivo(quantidade,valor_unitario)
+FROM produto;
+
+/*3. */
+
+CREATE OR REPLACE FUNCTION  func_analisar_margem(p_id_produto INT, 
+p_valor_venda_sugerido NUMERIC
+)
+RETURNS TEXT
+LANGUAGE plpgsql
+AS $$
+DECLARE 
+valor_custo NUMERIC;
+lucro NUMERIC;
+margem_percentual NUMERIC;
+BEGIN
+SELECT valor_unitario INTO valor_custo FROM produto
+WHERE id_produto = p_id_produto;
+	IF p_valor_venda_sugerido > valor_custo THEN
+	lucro := (p_valor_venda_sugerido - valor_custo);
+	margem_percentual := (lucro/p_valor_venda_sugerido) * 100;
+	RETURN margem_percentual;
+	ELSE
+	RETURN 'LUCRO MENOR QUE 0';
+	END IF;
+END;
+$$;
+SELECT nome,
+ func_analisar_margem(id_produto, 100.00) || '%' as margem_formatada
+FROM produto;
+
+		

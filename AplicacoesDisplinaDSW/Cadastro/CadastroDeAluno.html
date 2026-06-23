@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Cadastro de Aluno</title>
+        <style>
+
+            body{
+                background-color: #f4f6f8;
+                margin: 2%;
+            }
+
+            .principal{
+                position: relative;
+                width: 50%;
+                left: 25%;
+                background-color: white;
+                border: 1px solid white;
+                box-shadow: 2px 3px 20px 2px #0000003f;
+                border-radius: 5px;
+                border-spacing: 1px;
+                padding: 10px;
+            }
+
+            .botao{
+                padding: 0px 15px 10px 0px ;
+            }
+
+            th{
+                text-align: left;
+                vertical-align: top;
+                padding-bottom: 20px;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: large;
+            }
+
+            .rotulo{
+                text-align: left;
+                font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+                font-size: medium;
+            }
+
+            #enviar{
+                background-color: #007BFF; 
+                border: 1px solid #007BFF; 
+                border-radius: 5px; color: white;
+                padding: 8px;
+            }
+
+            #limpar{
+                background-color: #6c757d; 
+                border: 1px solid #6c757d; 
+                border-radius: 5px; color: white;
+                padding: 8px;
+            }
+
+            .tamanho{
+                width: 100%;
+                height: 100%;
+                box-sizing: border-box;
+            }
+
+            .text_area{
+                width: 100%;
+                height: 87.6px;
+                box-sizing: border-box;
+            }
+
+        </style>
+    </head>
+    <body>
+        <form>
+            <table class="principal">   
+
+                <tr><th colspan="2">Dados Pessoais</th></tr>
+
+                <tr><td class="rotulo" colspan="2"><label for="nome">Nome</label></td></tr>
+                <tr><td colspan="2"><input type="text" id="nome" class="tamanho" name="nome" placeholder="Digite o nome do aluno" required></td></tr>
+
+                <tr><td class="rotulo" colspan="2"><label for="sobrenome">Sobrenome</label></td></tr>
+                <tr><td colspan="2"><input type="text" id="sobrenome" class="tamanho" name="sobrenome" placeholder="Digite o sobrenome do aluno" required></td></tr>
+
+                <tr><td class="rotulo" colspan="2"><label for="sexo">Sexo</label></td></tr>
+                <tr>
+                    <td colspan="2">
+                        <select name="sexo" id="sexo" required class="tamanho">
+                            <option disabled selected value="">Selecione o sexo</option>
+                            <option value="Feminino">Feminino</option>
+                            <option value="Masculino">Masculino</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr><td class="rotulo" colspan="2"><label for="dataNascimento">Data de Nascimento</label></td></tr>
+                <tr><td colspan="2"><input type="date" id="dataNascimento" name="dataNascimento" required min="1901-01-01" max="2025-12-31" step="1" class="tamanho"></td></tr>
+
+                <tr><td class="rotulo" colspan="2"><label for="escolaridade">Nível de Escolaridade</label></td></tr>
+                <tr>
+                    <td colspan="2">
+                        <select name="escolaridade" id="escolaridade" required class="tamanho">
+                            <option disabled selected value="">Selecione o nível de escolaridade</option>
+                            <optgroup label="Ensino Fundamental">
+                                <option value="Fundamental Incompleto">Fundamental Incompleto</option>
+                                <option value="Fundamental Completo">Fundamental Completo</option>
+                            </optgroup>
+                            <optgroup label="Ensino Médio">
+                                <option value="Médio Incompleto">Médio Incompleto</option>
+                                <option value="Médio Completo">Médio Completo</option>
+                            </optgroup>
+                            <optgroup label="Ensino Superior">
+                                <option value="Superior Incompleto">Superior Incompleto</option>
+                                <option value="Superior Completo">Superior Completo</option>
+                            </optgroup>
+                            <optgroup label="Mestrado">
+                                <option value="Mestrado Incompleto">Mestrado Incompleto</option>
+                                <option value="Mestrado Completo">Mestrado Completo</option>
+                            </optgroup>
+                            <optgroup label="Doutorado">
+                                <option value="Doutorado Incompleto">Doutorado Incompleto</option>
+                                <option value="Doutorado Completo">Doutorado Completo</option>
+                            </optgroup>
+                            <optgroup label="Outros Casos">
+                                <option value="Não escolarizado(a)">Não alfabetizado(a)</option>
+                            </optgroup>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr><th colspan="2"><br>Endereço</th></tr>
+
+                <tr><td class="rotulo" colspan="2"><label for="endereco">Endereço</label></td></tr>
+                <tr><td colspan="2"><input type="text" id="endereco" class="tamanho" name="endereco" placeholder="Rua, avenida, etc." required></td></tr>
+
+                <tr>
+                    <td class="rotulo"><label for="numero">Número</label></td>
+                    <td class="rotulo"><label for="bairro">Bairro</label></td>
+                </tr>
+                <tr>
+                    <td><input type="number" id="numero" name="numero" placeholder="Ex: 123" class="tamanho" required min="1"></td>
+                    <td><input type="text" id="bairro" class="tamanho" name="bairro" placeholder="Digite o bairro" required></td>
+                </tr>
+
+                <tr>
+                    <td class="rotulo"><label for="cidade">Cidade</label></td>
+                    <td class="rotulo"><label for="UF">UF</label></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="cidade" class="tamanho" name="cidade" placeholder="Digite a cidade" required></td>
+                    <td>
+                        <select required name="UF" id="UF" class="tamanho">
+                            <option disabled selected value="">Selecione o estado</option>
+                            <optgroup label="Norte">
+                                <option value="Acre (AC)">Acre (AC)</option>
+                                <option value="Amapá (AP)">Amapá (AP)</option>
+                                <option value="Amazonas (AM)">Amazonas (AM)</option>
+                                <option value="Pará (PA)">Pará (PA)</option>
+                                <option value="Rondônia (RO)">Rondônia (RO)</option>
+                                <option value="Roraima (RR)">Roraima (RR)</option>
+                                <option value="Tocantins (TO)">Tocantins (TO)</option>
+                            </optgroup>
+                            <optgroup label="Nordeste">
+                                <option value="Alagoas (AL)">Alagoas (AL)</option>
+                                <option value="Bahia (BA)">Bahia (BA)</option>
+                                <option value="Ceará (CE)">Ceará (CE)</option>
+                                <option value="Maranhão (MA)">Maranhão (MA)</option>
+                                <option value="Paraíba (PB)">Paraíba (PB)</option>
+                                <option value="Pernambuco (PE)">Pernambuco (PE)</option>
+                                <option value="Piauí (PI)">Piauí (PI)</option>
+                                <option value="Rio Grande do Norte (RN)">Rio Grande do Norte (RN)</option>
+                                <option value="Sergipe (SE)">Sergipe (SE)</option>
+                            </optgroup>
+                            <optgroup label="Centro-Oeste">
+                                <option value="Distrito Federal (DF)">Distrito Federal (DF)</option>
+                                <option value="Goiás (GO)">Goiás (GO)</option>
+                                <option value="Mato Grosso (MT)">Mato Grosso (MT)</option>
+                                <option value="Mato Grosso do Sul (MS)">Mato Grosso do Sul (MS)</option>
+                            </optgroup>
+                            <optgroup label="Sudeste">
+                                <option value="Espírito Santo (ES)">Espírito Santo (ES)</option>
+                                <option value="Minas Gerais (MG)">Minas Gerais (MG)</option>
+                                <option value="Rio de Janeiro (RJ)">Rio de Janeiro (RJ)</option>
+                                <option value="São Paulo (SP)">São Paulo (SP)</option>
+                            </optgroup>
+                            <optgroup label="Sul">
+                                <option value="Paraná (PR)">Paraná (PR)</option>
+                                <option value="Rio Grande do Sul (RS)">Rio Grande do Sul (RS)</option>
+                                <option value="Santa Catarina (SC)">Santa Catarina (SC)</option>
+                            </optgroup>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr><th colspan="2"><br>Informações de Contato</th></tr>
+
+                <tr>
+                    <td class="rotulo"><label for="ddd">DDD</label></td>
+                    <td class="rotulo"><label for="telefone">Telefone</label></td>
+                </tr>
+                <tr>
+                    <td><input type="number" id="ddd" name="ddd" min="1" max="99" class="tamanho" placeholder="Ex: 11" required></td>
+                    <td><input type="tel" id="telefone" name="telefone" pattern="[0-9]{5}-[0-9]{4}" placeholder="Ex: 98765-4321" class="tamanho" required></td>
+                </tr>
+
+                <tr><td class="rotulo" colspan="2"><label for="email">E-mail</label></td></tr>
+                <tr><td colspan="2"><input type="email" id="email" name="email" required class="tamanho" placeholder="Digite o e-mail do aluno"></td></tr>
+
+                <tr><th colspan="2"><br>Filiação</th></tr>
+
+                <tr><td class="rotulo" colspan="2"><label for="nomePai">Nome do Pai</label></td></tr>
+                <tr><td colspan="2"><input type="text" id="nomePai" class="tamanho" name="nomePai" placeholder="Digite o nome do pai" required></td></tr>
+
+                <tr><td class="rotulo" colspan="2"><label for="nomeMae">Nome da Mãe</label></td></tr>
+                <tr><td colspan="2"><input type="text" id="nomeMae" class="tamanho" name="nomeMae" placeholder="Digite o nome da mãe" required></td></tr>
+
+                <tr><th colspan="2"><br>Observações Finais</th></tr>
+                <tr><td colspan="2"><textarea id="observacoes" name="observacoes" class="text_area" placeholder="Digite aqui qualquer observação adicional sobre o aluno..." minlength="10" maxlength="300"></textarea></td></tr>
+
+                <tr>
+                    <td colspan="2">
+                        <br><br>
+                        <table>
+                            <tr>
+                                <td class="botao"><input type="submit" id="enviar" value="Enviar" name="enviar"></td>
+                                <td class="botao"><input type="reset" id="limpar" value="Limpar" name="limpar"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+            </table>
+        </form>
+    </body>
+</html>

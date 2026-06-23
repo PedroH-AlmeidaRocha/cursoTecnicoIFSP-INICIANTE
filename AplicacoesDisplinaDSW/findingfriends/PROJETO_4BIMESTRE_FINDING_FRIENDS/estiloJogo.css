@@ -1,0 +1,176 @@
+body {
+    background-image: url(Imagens/fundo_oceano.jpg);
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    display: flex; /*Define o posicionamento de blocos flexíveis para possibilitar os alinhamentos*/
+    flex-direction: column; /*Define o empilhamento dos elementos de forma vertical*/
+    align-items: center; /*Por padrão, é usado para alinhamento ao longo do eixo transversal (vertical).
+        Mas, como o eixo principal passou a ser o vertical, o align-itens controla o alinhamento horizontal.*/
+}
+
+h1 {
+    text-align: center;
+    width: 100%;
+    font-size: 50px;
+    margin-top: 0;
+    margin-bottom: 50px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #07397a89;
+    text-shadow: 2px 2px 0 black;
+    border-bottom: 7px solid white;
+    color: white;
+}
+/*Títulos h1*/
+#facil {color: #00ff00}
+#medio {color: #ffc800}
+#dificil {color: #ff0000}
+#inicio {font-size: 100px;}
+
+table {
+    border-collapse: collapse;
+    border: 15px solid #ffffff;
+    position: relative;
+    box-shadow: 10px 15px 2px #0000003a;
+}
+
+td {
+    text-align: center;
+    align-items: center;
+    object-fit: contain;
+    display: inline-block;
+    border: 2px solid #ffffff;
+}
+td.padrao {background-color: #214e70; cursor: pointer;}
+td.padrao:hover {background-color: #3071a3}
+td.dificil {width: 45px; height: 45px}
+td.medio {width: 64.3px; height: 64.3px}
+td.facil {width: 90px; height: 90px}
+td.emBranco {background-color: white}
+td.lixo {background-image: url(Imagens/lixo_1vida.jpg); background-size: cover}
+td.anzol {background-image: url(Imagens/anzol_3Vidas.jpg); background-size: cover}
+td.cabeca {background-image: url(Imagens/cabeca_peixe.jpeg); background-size: cover}
+td.tronco {background-image: url(Imagens/tronco_peixe.jpeg); background-size: cover}
+td.cauda {background-image: url(Imagens/cauda_peixe.jpeg); background-size: cover}
+
+button {
+    width: 400px;
+    height: 200px;
+    border: 1px solid none;
+    border-radius: 10px;
+    box-shadow: 10px 15px 2px #0000003a;
+    font-size: 100px;
+    cursor: pointer;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-shadow: 2px 2px 0 black;
+    color: white;
+}
+
+/*Botões similares*/
+#play, #nao {
+    left: 38.5%;
+    position: absolute;
+    border-color: #ccd0d5; 
+    background-color: white; 
+    color: #1f5072;
+}
+#tutorial, #sim {
+    left: 38.5%;
+    position: absolute;
+    border-color: #14354d;
+    background-color: #1f5072;
+}
+#tutorial, #nao {
+    margin-top: 15%;
+}
+#play:hover, #nao:hover {color: #14354d; background-color: #ccd0d5}
+#tutorial:hover, #sim:hover {color: #ccd0d5; background-color: #14354d}
+
+/*Tela de carregamento*/
+div.campo {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: flex;
+    justify-content: center; /*Alinha o conteúdo horizontalmente*/
+    align-items: center; /*Alinha o conteúdo verticalmente, pois é perpendicular ao eixo horizontal*/
+}
+div.carregando {
+    width: 120px;
+    height: 120px;
+    border: 16px solid #4f99ed;
+    border-top: 16px dashed #4f99ed;
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+}
+@keyframes spin {
+    0% {transform: rotate(0deg);} 
+    100% {transform: rotate(360deg);}
+}
+
+div.escolherNivel {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: url(Imagens/fundo_oceano.jpg);
+    background-size: cover;
+}
+
+div.campoBotao {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    padding: 0;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
+button.facil, button.medio, button.dificil {
+    position: relative;
+    margin: 50px;
+}
+button.facil:hover, button.medio:hover, button.dificil:hover {
+    color: #ccd0d5;
+}
+button.facil {background-color: #00ff00; border-color: #118111;}
+button.medio {background-color: #ffc800; border-color: #866b0d;}
+button.dificil {background-color: #ff0000; border-color: #650f0f;}
+button.facil:hover {background-color: #118111;}
+button.medio:hover {background-color: #866b0d;}
+button.dificil:hover {background-color: #650f0f;}
+
+/* contator de peixes (colocar no canto superior direito) */
+#contadorPeixes {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: rgba(7, 57, 122, 0.6); /* mesma paleta do título */
+    color: white;
+    padding: 8px 12px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 4px 6px 10px #00000040;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    z-index: 999;
+    user-select: none;
+}
+#contadorPeixes .iconePeixe {
+    font-size: 26px; /* o "iconizinho" (emoji) */
+    line-height: 1;
+}
+#contadorPeixes .textoContador {
+    font-size: 20px;
+    font-weight: 700;
+}

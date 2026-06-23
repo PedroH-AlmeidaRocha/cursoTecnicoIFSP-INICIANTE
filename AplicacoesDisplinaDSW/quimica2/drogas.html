@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drogas Anti-Histamínicas</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background-image: url(imagens/fundoALL2.jpg);
+      color: #2f00ff;
+    }
+
+    /* Header */
+    header {
+      width: 100%;
+      height: 320px;
+      background-image: url(imagens/fundo\ superior.webp);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      /* título mais pra cima */
+      text-align: center;
+      padding: 40px 20px 20px 20px;
+
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      background-size:cover;
+      color: #447db3;
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+
+    header p {
+      color: #1a5e9e;
+      max-width: 700px;
+      font-size: 1.4em;
+      line-height: 1.6em;
+      text-align: justify;
+      /* justificado */
+      text-shadow: 1px 1px 3px rgba(0, 23, 99, 0.3);
+    }
+
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* Seções com sombra */
+    .section {
+      margin-bottom: 60px;
+      background: #e4f3ff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    /* Efeito hover */
+    .section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .section .image-wrapper {
+      width: 100%;
+      height: 400px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .section .image-wrapper img {
+      max-height: 100%;
+      max-width: 100%;
+      border-radius: 8px;
+    }
+
+    .section h2 {
+      color: #447db3;
+      font-size: 1.8em;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .section h3 {
+      color: #3e7bb4;
+      font-size: 1.7em;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .section p {
+      color: #447db3;
+      line-height: 1.6em;
+      font-size: 1em;
+    }
+
+    footer {
+      width: 105%;
+      height: 100px;
+      background-color: #d4eaff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 80px;
+      color: #1a5e9e;
+      font-size: 0.9em;
+    }
+
+ 
+.section button {
+  
+    background-color:rgb(52, 84, 116); 
+    color: white;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px; 
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+}
+
+
+.section button:hover {
+    background-color: #0056b3; 
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+.section button:active {
+    background-color: #004085; 
+    transform: translateY(2px); 
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.section {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.conteudo-escondido {
+    padding-top: 10px;
+    border-top: 1px dashed #eee;
+    margin-top: 10px;
+}
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1 style="color: rgb(52, 84, 116);">Drogas anti-histamínicas</h1>
+    <p> Anti-histamínico é uma classe de medicamentos para tratamento dos sintomas alérgicos.
+      Recebe esse nome devido à sua capacidade de inibir a ação da histamina,
+      uma substância produzida em excesso pelo corpo durante reações alérgicas e que desempenha
+      um papel fundamental na manifestação dos sintomas. </p>
+  </header>
+
+  <main>
+    <script>
+      function mostrar(botao) {
+        const section = botao.closest('.section');
+
+        const conteudo = section.querySelector('.conteudo-escondido');
+
+        if (conteudo) {
+          if (conteudo.style.display === "none") {
+            conteudo.style.display = "block";
+            botao.textContent = "Ver menos";
+          } else {
+            conteudo.style.display = "none";
+            botao.textContent = "Ver mais";
+          }
+        }
+      }
+    </script>
+
+
+    <div class="section">
+      <h3 style="color: rgb(52, 84, 116);">O que é alergia?</h3>
+      <p> A alergia é uma reação exagerada do sistema imunológico a substâncias externas chamadas alérgenos...</p>
+      <div id="conteudo" class="conteudo-escondido" style="display: none;">
+        <p> Os sintomas incluem espirros, olhos lacrimejantes, congestão nasal, erupções cutâneas, dificuldade
+          respiratória, entre outros. </p>
+        <p>
+          <b>Antialérgicos:</b><br>
+          Primeira geração: clorfenamina, cinarizina, difenidramina<br>
+          Segunda geração: loratadina, cetirizina, fexofenadina
+        </p>
+        <p>
+          <b>Formas:</b> orais, colírios, naturais (vitamina C, quercetina, probióticos, bromelaína)
+        </p>
+        <p>
+          <b>Infantil:</b> sempre com orientação médica
+        </p>
+      </div>
+      <button onclick="mostrar(this)">Ver mais</button>
+    </div>
+
+    <div class="section">
+      <h3 style="color: rgb(52, 84, 116);"> Nomeando anti-alérgicos (anti-histamínicos)</h3>
+      <p> Atualmente exisem antialérgicos naturais, orais e em forma de colírios: </p>
+      <div id="conteudo2" class="conteudo-escondido" style="display: none;">
+        <p>
+          <b>- Orais </b><br>
+          <br><b> Fexofenadina: </b> indicado para o alívio das manifestações alérgicas, como rinite alérgica, nariz
+          entupido, coceira no nariz, céu da boca, garganta e olhos, coriza, conjuntivite alérgica com lacrimejamento e
+          vermelhidão dos olhos, alergia a pólen e urticária (erupções avermelhadas na pele que causam coceira).
+        </p>
+
+        <p>
+          <b>Maleato de dexclorfeniramina: </b>
+          para alergia, prurido, rinite alérgica, urticária, picada de inseto,
+          conjuntivite alérgica, dermatite atópica (um tipo de inflamação na pele) e eczemas alérgicos (dermatite).
+        </p>
+
+        <p>
+          <b> Loratadina: </b> indicado para o alívio dos sintomas associados com a rinite alérgica, como coriza,
+          espirros,
+          coceira ocular, nasal e ardor, urticária e outras afecções dermatológicas alérgicas.
+        </p>
+
+        <p>
+          <b>- Colírios</b> <br>
+          Os colírios anti-histamínicos são medicamentos específicos para o alívio dos sintomas nos olhos, como coceira
+          e vermelhidão, pois bloqueiam a ação da histamina na região. São indicados em caso de quadros alérgicos
+          causados por poeira, pelos de animais, pólen, ácaros, entre outros.
+        </p>
+
+        <p> <b>- Anti-histamínicos naturais</b> <br>
+
+          Existem, ainda, os anti-histamínicos naturais ou fitoterápicos, ou seja, provenientes de plantas. Alguns
+          exemplos são: <br>
+          <b> Vitamina C: </b> presente na laranja, no kiwi, e nos morangos, pode ajudar no alívio de sintomas
+          respiratórios
+          causados por certas reações alérgicas. <br>
+          <b> Quercetina: </b> antioxidante presente na cebola, orégano, erva-doce, alface, espinafre e couve. Tem
+          propriedades
+          anti-histamínicas e pode ajudar a suprimir uma resposta alérgica.
+        </p>
+
+        <p>
+          <b>Probióticos: </b> microrganismos que vivem no sistema digestivo e que estão presentes nos iogurtes. Podem
+          ajudar no tratamento de distúrbios do sistema imunológico, como é o caso das alergias.
+        </p>
+
+        <p>
+          <b>Bromelaína:</b> grupo de enzimas encontradas no abacaxi. Pode auxiliar no alívio da congestão nasal, um dos
+          sintomas de alergias respiratórias. <br>
+
+          No entanto, ainda faltam estudos mais aprofundados sobre o assunto. É importante frisar que não há evidências
+          que comprovem que os antialérgicos naturais possam substituir os medicamentos tradicionais, principalmente em
+          caso de reações alérgicas fortes e graves, servindo mais como um tratamento complementar.
+        </p>
+
+        <p> <b> - Anti-histamínico infantil </b> <br>
+          Para administração de anti-histamínicos neste público, será fundamental conversar com um médico e/ou
+          farmacêutico, que indicará o melhor tratamento, de acordo com a faixa etária da criança e/ou peso.
+          Vale destacar que é imprescindível uma avaliação médica com um especialista para definir qual o melhor tipo de
+          antialérgico para cada caso e cada paciente. Além disso, alguns medicamentos podem interagir entre si, como
+          alguns tipos de antidepressivos. 
+        
+            <br>
+          <br>
+         <br> <b>Fontes bibliograficas para pesquisa de "alergia e Nomeando anti-alérgicos ": </b><br>
+        <br><i><b> NEO QUÍMICA. O que é anti-histamínico e quando usar cada tipo. Neo Química, 2023.</b> Disponível em: https://www.neoquimica.com.br/blog/alergia/o-que-e-anti-histaminico-e-quando-usar-cada-tipo. Acesso em: 5 nov. 2025. <br> </i>
+        
+        
+        
+        </p>
+      
+      
+      
+        </div>
+      <button onclick="mostrar(this)">Ver mais</button>
+    </div>
+
+    <div class="section">
+      <div class="image-wrapper">
+        <img src="imagens/loratadina.jpeg" alt=" Molécula de Loratadina imagem " title="Molécula de Loratadina">
+      </div>
+      <h2 style="color: rgb(52, 84, 116);">Loratadina</h2>
+      <p> A loratadina (C₂₂H₂₃ClN₂O₂) é um medicamento anti-histamínico (antialérgico) de segunda geração, amplamente utilizado para
+        aliviar os sintomas associados a reações alérgicas. O nome IUPAC (União Internacional de Química Pura e Aplicada) 
+        da loratadina é: <b>éster etílico do ácido 4-(8-cloro-5,6-di-hidro-11H-benzo[5,6]cicloepta[1,2-b]piridin-11-ilideno)-1-piperidínocarboxílico.</b>  </p>
+      <div id="conteudoLORATADINA" class="conteudo-escondido" style="display: none;">
+        <p> A Loratadina atua bloqueando a ação da histamina, uma substância química liberada pelo corpo durante uma
+          reação alérgica. Ao antagonizar os receptores H1 periféricos(O receptor H1  é codificado no cromossomo humano 3, sendo o responsável por muitos sintomas das doenças alérgicas, tais como o prurido, a rinorreia, o broncoespasmo e a contração da musculatura lisa intestinal.), ela impede que a histamina desencadeie os
+          sintomas alérgicos, como inchaço e coceira. <br>
+          <b> - Modos de uso: </b> A Loratadina é aprovada principalmente para os seguintes usos médicos: <br>
+          <b> Rinite alérgica: </b> Ajuda a aliviar os sintomas associados a alergias sazonais (febre do feno) e rinite
+          alérgica
+          perene. <br>
+          <b> Urticária crônica: </b> A Loratadina é eficaz no tratamento de urticária crônica, proporcionando alívio da
+          coceira
+          e do desconforto. <br>
+          <b> Outras reações alérgicas: </b> Também pode ser usado para outras condições alérgicas, conforme determinado
+          por um
+          profissional de saúde.
+        </p>
+        <p > <br><b> Benefícios da Loratadina. </b><br>
+
+          A loratadina oferece diversas vantagens clínicas e práticas: <br>
+          <br>
+      <b> - Não sedativo:</b> É menos provável que cause sonolência em comparação aos anti-histamínicos de primeira geração, tornando-o adequado para uso diurno. <br>
+ 
+        <b> - Alívio duradouro:</b> Uma única dose pode proporcionar alívio por até 24 horas, permitindo uma administração prática uma vez ao dia. <br>
+  
+        <b>- Ampla disponibilidade:</b> A loratadina está disponível sem receita, o que a torna facilmente acessível para quem sofre de alergias.  <br>
+      </p>
+        
+     <p><b> Contraindicações da loratadina. </b><br>
+
+      <br>Certos indivíduos devem evitar o uso de loratadina, incluindo: <br>
+      
+       <br> <b>- Mulheres grávidas ou amamentando:</b>  Consulte um profissional de saúde antes de usar.  <br>
+     <b> - Uso durante a gravidez e lactação:</b> A loratadina é geralmente considerada segura durante a gravidez e a amamentação. No entanto, consulte sempre o seu médico antes de usar qualquer medicamento durante a gravidez ou amamentação. <br>
+     <b>Indivíduos com doença hepática grave:</b> Ajustes de dosagem podem ser necessários.  <br>
+     <b>Reações alérgicas:</b> Pessoas com alergia conhecida à Loratadina ou a qualquer um de seus componentes não devem tomá-la. <br>
+      <b>Funções presentes na loratadina:</b><br> 
+      As funções orgânicas presentes são: éster, amida terciaria e amina.
+      <br>
+      <br> 
+      <b>Fontes bibliograficas para pesquisa: </b><br>
+      <br> <i><b> Apollo hospitals.</b> Disponível em: https://www.apollohospitals.com/pt/medicines/loratadine#:~:text=A%20Loratadina%20%C3%A9%20um%20a   nti%2Dhistam%C3%ADnico%20de%20segunda,urtic%C3%A1ria%20e%20outras%20rea%C3%A7%C3%B5  es%20al%C3%A9rgicas%20na%20pele. Acesso em 04/11/2025</i><br> 
+     <br>
+     <i><b>Science Direct.</b> Disponível em: https://www.sciencedirect.com/topics/medicine-and-dentistry/histamine-h1-receptor#:~:text=Os%20receptores%20de%20histamina%20H1,de%20doen%
+      C3%A7as%20al%C3%A9rgicas%20e%20anafilaxia.&text=Qu%C3%A3o%20%C3%
+      BAtil%20%C3%A9%20esta%20defini%C3%A7%C3%A3o?. Acesso em 04/11/2025</i>
+    
+    </p>
+    
+    </div>
+
+      <button onclick="mostrar(this)">Clique aqui e conheça mais sobre a Loratadina</button>
+    </div>
+
+    <div class="section">
+      <div class="image-wrapper">
+        <img src="imagens/cetirizina.jpeg" alt=" Molécula de Cetirizina imagem " title="Molécula de Cetirizina">
+      </div>
+      <h2 style="color: rgb(52, 84, 116);">Cetirizina</h2>
+      <p> A cetirizina (C₂₁H₂₇Cl₃N₂O₃) é um medicamento antialérgico pertencente à classe dos anti-histamínicos de segunda geração. Ela
+        é utilizada para tratar sintomas de alergias, como coriza, espirros, coceira nos olhos, urticária e outras
+        reações alérgicas de pele.O nome IUPAC da cetirizina é: 
+        <b>ácido 2-[2-[4-[(4-clorofenil)-fenilmetil]piperazin-1-il]etoxi]acético.</b>  </p>
+      <div id="conteudoCETIRIZINA" class="conteudo-escondido" style="display: none;">
+        <p> Seu principal mecanismo de ação é bloquear os receptores H₁ da histamina, que é uma substância produzida
+          pelo
+          corpo que causa inflamação e sintomas alérgicos. Por ser uma droga de segunda geração, ela causa menos
+          sonolência do que os anti-histamínicos mais antigos, como a difenidramina e a prometazina. </p><br>
+        <p> <b> Modos de uso: </b> A cetirizina é amplamente usada em tratamentos de curta e longa duração para:
+          Rinite alérgica (sazonal ou perene); <br>
+          Urticária crônica idiopática; <br>
+          Dermatites alérgicas; <br>
+          Conjuntivite alérgica; <br>
+          Alergias respiratórias leves. <br> </p>
+        <p> Também é usada em algumas formulações infantis (xaropes e gotas), pois é bem tolerada e segura em doses
+          adequadas. Além de ser encontrada em várias formas farmacêuticas, dependendo da idade do paciente e da
+          necessidade do tratamento: <br>
+          Comprimidos (geralmente 10 mg); <br>
+          Comprimidos mastigáveis (para crianças); <br>
+          Solução oral (xarope ou gotas); <br>
+          Cápsulas gelatinosas (em algumas marcas); <br>
+          A cetirizina deve ser ingerida por via oral, com ou sem alimentos, uma vez ao dia, geralmente no mesmo
+          horário. Pode ser tomada com um copo de água, e não deve ser mastigada (no caso de comprimidos comuns). O
+          medicamento começa a fazer efeito em cerca de 30 a 60 minutos após a ingestão e seu efeito dura até 24 horas,
+          o que permite uso diário único. </p>
+        <p> <b> Benefícios da Cetirizina </b> <br>
+          A cetirizina é amplamente utilizada no tratamento de alergias respiratórias e cutâneas, sendo considerada
+          segura, eficaz e moderna. Por ser um anti-histamínico de segunda geração, ela apresenta diversas vantagens em
+          relação aos medicamentos mais antigos. <br>
+          <b> 1-Alívio rápido dos sintomas alérgicos </b> <br>
+          Atua bloqueando os receptores H₁ da histamina, reduzindo sintomas como: <br>
+          - Espirros; <br>
+          - Coriza; <br>
+          - Coceira nos olhos, nariz e garganta; <br>
+          - Vermelhidão e inchaço na pele (urticária); <br>
+          <b> 2-Efeito prolongado (24 horas) </b><br>
+          Uma única dose diária é suficiente para controlar os sintomas durante o dia inteiro.
+          <b> 3-Pouca sonolência </b>: Diferente de outros anti-histamínicos (como a difenidramina), a cetirizina atua
+          mais seletivamente no sistema nervoso periférico, o que minimiza a sedação.<br>
+          <b> 4-Boa tolerância em crianças e idosos </b>: É uma das opções mais seguras para uso pediátrico e em
+          tratamentos contínuos, quando usada nas doses corretas. <br>
+          <b> 5-Não prejudica a concentração : </b> A maioria das pessoas pode realizar atividades diárias (como
+          estudar, dirigir, trabalhar) sem prejuízo
+          cognitivo. <br>
+          <b> 6-Baixo risco de interação medicamentosa </b>: Pode ser usada junto com outros tratamentos de forma
+          segura, sob orientação médica.<br>
+        
+            <B>Malefícios e Efeitos Adversos da Cetirizina</B><br>
+            Apesar de ser um medicamento seguro, o uso da cetirizina pode causar 
+            efeitos indesejáveis, especialmente se for usada em doses elevadas ou por longos períodos sem acompanhamento médico.<br>
+           <B> Efeitos colaterais mais comuns (geralmente leves):</B><br>
+             - Sonolência leve (em algumas pessoas);<br>
+              -	Boca seca;<br>
+              -	Dor de cabeça;<br>
+              -	Fadiga ou sensação de cansaço;<br>
+              -	Tontura leve;<br>
+              Esses sintomas costumam desaparecer com o tempo ou com ajuste de dose.<br>
+         <B>Efeitos colaterais menos comuns:</B><br> 
+          -	Náusea e desconforto gástrico<br> 
+          -	Irritação, agitação ou sonolência excessiva em crianças<br> 
+          -	Reações cutâneas leves (vermelhidão, coceira)<br> 
+         <B>Reações raras (mas graves, exigem atendimento médico imediato):</B><br>
+          -	Reação alérgica à própria cetirizina, com sintomas como inchaço no rosto, dificuldade para respirar ou urticária intensa.<br> 
+            -	Distúrbios urinários (retenção de urina, principalmente em pessoas com problemas na próstata).<br> 
+            -	Alterações hepáticas (muito raras, observadas em tratamentos prolongados).<br> 
+            -Convulsões (em pessoas com epilepsia ou sensibilidade neurológica).<br> 
+        <B> Contraindicações da Cetirizina</B> <br>    
+          A cetirizina é considerada um medicamento seguro e bem tolerado, mas não é indicada para todos os pacientes.
+          Algumas condições de saúde ou fatores específicos podem aumentar o risco de efeitos indesejáveis ou alterar a forma como o corpo elimina o remédio.<br>
+          <B> 1. Hipersensibilidade (alergia ao medicamento)</B> <br>
+          A principal contraindicação é a alergia à própria cetirizina ou a qualquer um dos componentes da fórmula (como corantes, conservantes ou excipientes).<br>
+          Sinais de reação alérgica incluem:<br>
+          -	Coceira intensa
+          -	Vermelhidão ou urticária
+          -	Inchaço nos lábios, olhos ou garganta
+          -	Dificuldade para respirar<br>
+          Se isso ocorrer, o uso deve ser interrompido imediatamente e procure atendimento médico.<br>
+        <B> 2. Uso em crianças muito pequenas</B><br>
+          -	Menores de 2 anos: a cetirizina não deve ser usada sem prescrição médica.<br>
+          -	Para crianças pequenas, a dose deve ser cuidadosamente ajustada (geralmente em gotas ou xarope).<br>
+          <B> 3. Problemas renais graves (insuficiência renal)</B>
+          A cetirizina é eliminada principalmente pelos rins. Pessoas com função renal reduzida podem acumular o medicamento no organismo, o que aumenta o risco de efeitos colaterais como sonolência, tontura e fadiga.<br>
+          Nesses casos, o médico deve:<br>
+          - Reduzir a dose diária; ou<br>
+          -	Aumentar o intervalo entre as doses; ou<br>
+          -	Substituir por outro anti-histamínico mais seguro para o rim.<br>
+          <B>4. Uso em gestantes e lactantes</B>
+          - Durante a gravidez: não há estudos suficientes que comprovem total segurança.<br>
+        Por isso, o uso só é recomendado se o médico considerar essencial, avaliando riscos e benefícios.<br>
+          -	Durante a amamentação: a cetirizina pode passar para o leite materno, e embora em pequenas quantidades, não é recomendada sem orientação médica.<br>
+          <B>5. Pessoas com problemas hepáticos (no fígado)</B> 
+              Embora o fígado não seja a principal via de eliminação, em casos de doença hepática avançada (como hepatite ou cirrose), o metabolismo pode ficar alterado.<br>
+              Nessas situações, o uso deve ser monitorado e ajustado pelo médico.<br>
+           <B> 6. Uso concomitante com álcool ou sedativos</B><br>
+           A cetirizina, mesmo sendo de segunda geração, pode potencializar o efeito sedativo de:<br>
+          -	Bebidas alcoólicas; <br>
+          -	Remédios calmantes, ansiolíticos ou indutores do sono; <br>
+          Isso pode causar sonolência excessiva, lentidão de reflexos e redução da concentração. Evite combinar essas substâncias.<br>
+          <B>7. Pacientes com epilepsia ou distúrbios neurológicos</B>
+          Em pessoas sensíveis, o uso da cetirizina pode alterar a excitabilidade do sistema nervoso central,<br> aumentando o risco de crises convulsivas — embora isso seja raro.
+          Deve ser usada com precaução e sob supervisão médica. <br>
+          <b>Funções presentes na cetirizina:</b><br>
+      As funções orgânicas presentes são: Ácido carboxílico, amina terciária e éter.
+          
+          <br>
+          <br>
+         <br> <b>Fontes bibliograficas para pesquisa: </b><br>
+        <br><i><b> Agência Nacional de Vigilância Sanitária.</b> Disponível em: Anvisahttps://www.gov.br/anvisa <br>
+           <b>Cetirizine. </b>Disponível em: https://www.drugs.com/cetirizine-hcl.html<br> 
+        <b> asbai. </b>Disponível em:  https://www.asbai.org.br/ </i><br>
+
+
+        
+        </p>
+        
+        </p>
+      </div>
+      <button onclick="mostrar(this)">Clique aqui e conheça mais sobre a Cetirizina</button>
+    </div>
+
+    <div class="section">
+      <div class="image-wrapper">
+        <img src="imagens/fexofenadina.jpeg" alt=" Molécula de Fexofenadina imagem " title="Molécula de Fexofenadina">
+      </div>
+      <h2 style="color: rgb(52, 84, 116);">Fexofenadina</h2>
+      <p> A fexofenadina(C₃₂H₃₉NO₄) é um anti-histamínico de segunda geração que age bloqueando
+        os efeitos da histamina, uma substância produzida pelo corpo que causa os
+        sintomas alérgicos. A sua fórmula química é a do cloridrato de fexofenadina,
+        que é sintetizada a partir de compostos como o éster piperidina-4-carboxilato e
+        4-bromofenilacetonitrila através de uma série de reações químicas.
+      O nome IUPAC da Fexofenadina é: <b>ácido 2-[4-[1-hidroxi-4-[4-[hidroxi(difenil)metil]piperidin-1-il]butil]fenil]-2-metilpropanoico.</b> </p>
+      <div id="conteudoFEXOFEDINA" class="conteudo-escondido" style="display: none;">
+        <p> O cloridrato de fexofenadina é indicado para o tratamento de alergias das vias respiratórias, como a rinite
+          alérgica, ajudando a aliviar os sintomas como espirros constantes, nariz escorrendo ou entupido, ou coceira no
+          nariz. Além disso, alivia o lacrimejamento, coceira e ardência nos olhos.
+        <p>
+
+        <p> <b> O cloridrato de fexofenadina também é indicado para o tratamento de: </b><br>
+          Urticária, um tipo de reação alérgica na pele, que causa coceira
+          intensa, formação de pequenas bolhas ou manchas vermelhas na pele. Indicado para o tratamento de:<br> Rinite
+          alérgica;<br> Conjuntivite;<br> Eczema; <br>Picadas e ferroadas de insetos.<br>
+        <p> <b> Efeitos colaterais: </b>Quando
+          se manifestam, os efeitos colaterais da fexofenadina tendem a ser leves e melhorar com o tempo. Eles
+          incluem:<br>
+          Dor de cabeça;<br> Tontura; <br> Diarreia; <br> Vômito; <br> Dor nos braços, pernas ou costas; <br> Tosse.
+          <br>
+          Vale destacar que, diferentemente de outros anti-histamínicos, como hidroxizina e prometazina, a
+          fexofenadina não interfere
+          no funcionamento dos receptores de histamina presentes no sistema nervoso central. Na prática, isso
+          significa
+          que o medicamento não leva a pessoa a apresentar tanta sonolência ou cansaço.
+        </p>
+        <p> <b> Contraindicações </b> <br> Além de ser
+          contraindicada a pessoas que já tenham enfrentado episódios de alergia à fexofenadina ou a qualquer um
+          de seus
+          componentes, o medicamento deve ser evitado por quem tem histórico de problemas no fígado, nos rins e no
+          coração. O mesmo vale para indivíduos que apresentem epilepsia ou outra condição de saúde que os coloque
+          em
+          risco de convulsões. A fexofenadina não deve ser usada por mulheres grávidas ou em amamentação, ou por
+          pessoas
+          que tenham alergia ao cloridrato de fexofenadina ou a qualquer componente da fórmula. Além disso, os
+          comprimidos de fexofenadina não devem ser usados por crianças com menos de 12 anos. Já a fexofenadina
+          xarope
+          pediátrico não deve ser usada por crianças com menos de 6 meses, para o tratamento da urticária
+          idiopática
+          crônica, ou por crianças com menos de 2 anos para o tratamento da rinite alérgica sazonal. <br>
+        
+          <b>Funções presentes na fexofenadina:</b><br>
+      As funções orgânicas presentes são: Amina terciária, ácido carboxílico e álcool.
+          
+          <br>
+          <br>
+         <br> <b>Fontes bibliograficas para pesquisa: </b><br>
+        <br><i><b> Vida sáudavel - Einstein</b> Disponível em :https://vidasaudavel.einstein.br/fexofenadina-saiba-para-que-serve-e-os-efeitos-colaterais-do-antialergico/ <br>
+           <b>cloridrato de Fexofedina. </b>Disponível em: https://pubchem.ncbi.nlm.nih.gov/compound/Fexofenadine-Hydrochloride#section=Names-and-Identifiers<br> 
+        <b> Fexofedina - para que serve </b>Disponível em:  https://www.tuasaude.com/fexofenadina/ </i><br>
+        
+        </p>
+        </p>
+      </div>
+      <button onclick="mostrar(this)">Clique aqui e conheça mais sobre a Fexofedina</button>
+    </div>
+  </main>
+  <footer>
+    <p >BiaPedroHPiresRose — ©️ 2025</p>
+  </footer>
+
+</body>
+
+</html>

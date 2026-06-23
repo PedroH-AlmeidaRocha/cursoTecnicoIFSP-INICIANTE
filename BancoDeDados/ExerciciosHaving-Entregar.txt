@@ -1,0 +1,83 @@
+--1
+SELECT c.nome AS cidade,
+       COUNT(b.id_bairro) AS qtd_bairros
+FROM Cidade c
+JOIN Bairro b ON c.id_cidade = b.id_cidade
+GROUP BY c.id_cidade, c.nome
+HAVING COUNT(b.id_bairro) >= 2
+ORDER BY qtd_bairros DESC;
+
+
+--2
+
+
+SELECT e.nome_estado AS Estado,
+       COUNT(c.id_cidade) AS qtd_cidades
+FROM Estado e
+JOIN Cidade c ON e.uf = c.uf
+GROUP BY e.nome_estado
+HAVING COUNT(c.id_cidade) >= 2
+ORDER BY qtd_cidades DESC;
+
+--3
+
+select c.nome as clientes,
+	SUM(co.valor) as compras
+from Cliente c
+JOIN Compra co on c.id_cliente = co.id_cliente
+group by c.nome
+having SUM(co.valor)>500
+order by compras desc;
+
+--4
+
+SELECT d.nome AS departamento,
+       AVG(f.salario) AS media_salarial
+FROM Funcionario f
+JOIN Departamento_Funcionario df ON f.id_funcionario = df.id_funcionario
+JOIN Departamento d ON df.id_departamento = d.id_departamento
+GROUP BY d.nome
+HAVING AVG(f.salario) > 2500
+ORDER BY media_salarial DESC;
+
+--5 
+
+SELECT f.nome AS funcionaria,
+       COUNT(d.id_dependente) AS qtd_dependentes
+FROM Funcionario f
+JOIN Dependente d ON f.id_funcionario = d.id_funcionario
+
+GROUP BY f.nome, f.sexo
+HAVING f.sexo ='F' AND COUNT(d.id_dependente) > 1
+ORDER BY qtd_dependentes DESC;
+
+--6 
+SELECT f.nome AS fornecedor,
+       SUM(CASE WHEN p.valor_unitario > 20 THEN 1 ELSE 0 END) AS qtd_produtos_maior20 --essa fução é mt top pra substituir o where, professor
+FROM Fornecedor f
+JOIN Produto p ON f.id_fornecedor = p.id_fornecedor
+GROUP BY f.nome
+HAVING SUM(CASE WHEN p.valor_unitario > 20 THEN 1 ELSE 0 END) > 2
+ORDER BY qtd_produtos_maior20 DESC;
+
+
+
+--7
+SELECT p.nome as produto,
+       sum(p.quantidade) AS qtd_produtos
+FROM Produto p
+
+GROUP BY p.nome
+HAVING sum(p.quantidade) <10
+ORDER BY qtd_produtos DESC; 
+
+--8
+SELECT c.tipo AS TipoProduto,
+       COUNT(p.quantidade) AS qtd_prudutosCadastrados
+FROM Categoria c
+JOIN Produto p ON c.id_categoria = p.id_categoria
+GROUP BY c.tipo
+HAVING COUNT(p.quantidade) > 5
+ORDER BY qtd_prudutosCadastrados DESC;
+
+--Pedro Henrique de Almeida Rocha INI2

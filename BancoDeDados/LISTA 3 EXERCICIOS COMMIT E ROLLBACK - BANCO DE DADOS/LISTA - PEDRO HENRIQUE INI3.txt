@@ -1,0 +1,73 @@
+ /*1*/
+
+CREATE OR REPLACE PROCEDURE proc_desativar_produto(
+p_id_produto INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	v_estoque_atual DATE;
+BEGIN
+	SELECT data_validade INTO v_estoque_atual
+	FROM produto WHERE id_produto = p_id_produto;
+
+	IF v_estoque_atual < CURRENT_DATE THEN
+	UPDATE produto
+	SET quantidade = 0
+	WHERE id_produto = p_id_produto;
+
+	RAISE NOTICE 'PRODUTO VENCIDO';
+
+	COMMIT;
+	ELSE
+
+	RAISE NOTICE 'PRODUTO NA VALIDADE';
+	ROLLBACK;
+	END IF;
+  END;
+ $$; 
+
+ CALL proc_desativar_produto(001);
+
+ 
+)
+
+/*3*/
+
+CREATE OR REPLACE PROCEDURE proc_confirma_venda(
+p_id_compra INTEGER,
+p_id_produto INTEGER,
+p_quantidade INTEGER,
+p_forma_pagamento VARCHAR
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	v_estoque_atual INTEGER;
+BEGIN
+	SELECT quantidade INTO v_estoque_atual
+	FROM produto WHERE id_produto = p_id_produto;
+
+	IF v_estoque_atual > 0 THEN
+
+	UPDATE produto
+	SET quantidade =  quantidade - p_quantidade
+	WHERE id_produto = p_id_produto;
+
+
+	UPDATE compra
+	SET finalizada = 1
+	WHERE id_compra = p_id_compra;
+	
+	RAISE NOTICE 'venda realizada';
+	COMMIT;
+
+	ELSE
+	RAISE NOTICE 'ERRO: venda não realizada';
+	ROLLBACK;
+	
+	END IF;
+ END;
+$$; 
+
+ CALL proc_confirma_venda(24,001,2, 'Débito');

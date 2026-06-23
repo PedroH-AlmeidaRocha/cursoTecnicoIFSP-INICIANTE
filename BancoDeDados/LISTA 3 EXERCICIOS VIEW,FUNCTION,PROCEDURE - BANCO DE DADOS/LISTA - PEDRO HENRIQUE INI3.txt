@@ -1,0 +1,109 @@
+--Pedro Henrique de Almeida Rocha, INI3
+
+/*1. Crie uma VIEW chamada vw_auditoria_compras. Ela deve juntar as tabelas compra, cliente e
+funcionario, exibindo: id_compra, nome_cliente, nome_funcionario, valor total, e a
+forma_pagamento. 
+Regra: Só devem aparecer nessa VIEW as compras que já foram finalizadas (finalizada = '1').*/
+
+CREATE OR REPLACE VIEW vw_auditoria_compras AS
+SELECT
+	   co.id_compra AS id_compra,
+	   f.nome AS nome_funcionario,
+	   c.nome AS nome_cliente,
+	   co.valor AS valor,
+	   co.forma_pagamento,
+	   co.finalizada AS status
+FROM compra co
+JOIN cliente c 
+	ON c.id_cliente = co.id_cliente
+JOIN funcionario f
+	ON f.id_funcionario = co.id_funcionario
+WHERE co.finalizada = '1';
+
+SELECT * FROM vw_auditoria_compras;
+
+/* 2 Crie uma FUNCTION chamada func_valida_limite_desconto(p_valor_original NUMERIC,
+p_valor_com_desconto NUMERIC).
+Lógica: Ela deve calcular a porcentagem de desconto que foi dada. Se o desconto for maior que
+25%, a função deve retornar o texto ‘ALERTA: DESCONTO SUSPEITO’. Caso contrário, deve
+retornar ‘DESCONTO PERMITIDO’.*/
+
+CREATE OR REPLACE FUNCTION func_valida_limite_desconto (p_valor_original NUMERIC,
+p_valor_com_desconto NUMERIC
+)
+RETURNS TEXT
+LANGUAGE plpgsql
+AS $$
+DECLARE
+valor_percentual NUMERIC;
+
+BEGIN
+ valor_percentual := (p_valor_original - p_valor_com_desconto)/ p_valor_original;
+ IF valor_percentual > 0.25 THEN
+  	return 'ALERTA: DESCONTO SUSPEITO';
+ ELSE 
+ 	return 'DESCONTO PERMITIDO';
+ END IF;
+ 	
+END;
+$$;
+
+SELECT func_valida_limite_desconto(19.93,);
+
+/*3. Crie a PROCEDURE proc_finalizar_venda_segura(p_id_compra INT, p_valor_final NUMERIC,
+p_forma_pagamento VARCHAR).
+a. Ela deve buscar o valor original da compra na tabela compra.
+b. Ela deve chamar a FUNCTION do Exercício 2 para verificar se o p_valor_final enviado é seguro
+ou suspeito.
+c. Tomada de Decisão:
+- Se a função retornar ‘ALERTA: DESCONTO SUSPEITO’, a procedure deve barrar a
+venda, executar um ROLLBACK e exibir a mensagem: “Venda cancelada! Desconto acima do
+permitido para o caixa.”.
+- Se retornar ‘DESCONTO PERMITIDO’, ela deve dar um UPDATE na tabela compra
+mudando o valor para p_valor_final, salvando a forma_pagamento, mudando finalizada = ‘1’, e
+executar o COMMIT exibindo: “Venda finalizada com sucesso!”.*/
+
+CREATE OR REPLACE PROCEDURE proc_finalizar_venda_segura (
+    p_id_compra INT, 
+    p_valor_final NUMERIC, 
+    p_forma_pagamento VARCHAR
+) 
+LANGUAGE plpgsql 
+AS $$ 
+DECLARE
+    v_valor_original NUMERIC;
+    v_status_desconto TEXT;
+BEGIN
+
+    SELECT valor 
+    INTO v_valor_original 
+    FROM compra 
+    WHERE id_compra = p_id_compra;
+
+   
+    v_status_desconto := func_valida_limite_desconto(v_valor_original, p_valor_final);
+
+  
+    IF v_status_desconto = 'ALERTA: DESCONTO SUSPEITO' THEN
+        ROLLBACK;
+        RAISE EXCEPTION 'Venda cancelada! Desconto acima do permitido para o caixa.';
+    ELSIF v_status_desconto = 'DESCONTO PERMITIDO' THEN
+        UPDATE compra 
+        SET valor = p_valor_final, 
+            forma_pagamento = p_forma_pagamento, 
+            finalizada = '1'
+        WHERE id_compra = p_id_compra;
+        
+        COMMIT;
+        RAISE NOTICE 'Venda finalizada com sucesso!';
+    END IF;
+END;
+$$;
+call proc_finalizar_venda_segura (4,19.93,'credito');
+
+--testes
+INSERT INTO compra (id_compra, id_cliente, id_funcionario, data_compra, valor, finalizada) VALUES (500, 1, 2, CURRENT_DATE, 100.00, '0');
+
+CALL proc_finalizar_venda_segura(500, 60.00, 'Dinheiro');
+CALL proc_finalizar_venda_segura(500, 85.00, 'PIX');
+SELECT * FROM vw_auditoria_compras;

@@ -1,0 +1,101 @@
+--1
+
+CREATE or REPLACE PROCEDURE  sp_status_compra (
+	IN p_id_compra INT,
+	OUT p_resultado TEXT
+)
+LANGUAGE plpgsql
+AS $$
+ 	DECLARE
+	 controle INT;
+	BEGIN
+	
+		SELECT finalizada into controle  FROM compra
+		WHERE id_compra = p_id_compra;
+		
+		IF  controle = 1 THEN
+			SELECT 'compra finalizada ' INTO p_resultado; 
+		ELSIF  controle = 0 THEN 
+			SELECT 'compra nao finalizada ' INTO p_resultado;		
+		ELSE 
+				SELECT 'não encontrada ' INTO p_resultado;
+		END IF;
+  	END;		
+$$;	
+		
+CALL sp_status_compra(002, NULL); 
+
+
+--2
+
+
+CREATE OR REPLACE PROCEDURE sp_nome_tipo(
+    IN p_id_tipo_endereco INT,  
+    OUT p_resultado VARCHAR(50) 
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    CASE p_id_tipo_endereco
+        WHEN 1 THEN p_resultado := 'Rua';
+        WHEN 2 THEN p_resultado := 'Avenida';
+        WHEN 3 THEN p_resultado := 'Estrada';
+        WHEN 4 THEN p_resultado := 'Praça';
+        WHEN 5 THEN p_resultado := 'Alameda';
+        WHEN 6 THEN p_resultado := 'Beco';
+        WHEN 7 THEN p_resultado := 'Travessa';
+	    WHEN 8 THEN p_resultado := 'Viela';	
+		WHEN 9 THEN p_resultado := 'Rodovia';
+		WHEN 10 THEN p_resultado := 'Casa';
+		WHEN 11 THEN p_resultado := 'Apartamento';
+		WHEN 12 THEN p_resultado := 'Sobrado';
+		WHEN 13 THEN p_resultado := 'Aeroporto';
+		WHEN 14 THEN p_resultado := 'Condominio';
+		WHEN 15 THEN p_resultado := 'Vila';
+		WHEN 16 THEN p_resultado := 'Trevo';
+		WHEN 17 THEN p_resultado := 'Distrito';
+		WHEN 18 THEN p_resultado := 'Favela';
+		WHEN 19 THEN p_resultado := 'Ladeira';
+		WHEN 20 THEN p_resultado := 'Passarela';
+		
+		ELSE p_resultado := 'Tipo desconhecido';
+    END CASE;
+END;
+$$;
+CALL sp_nome_tipo(18, NULL); 
+
+--3
+
+CREATE OR REPLACE PROCEDURE sp_avaliar_salario(
+    IN p_id_funcionario INT,
+    OUT p_resultado TEXT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_salario NUMERIC; 
+BEGIN
+   
+    SELECT salario INTO v_salario
+    FROM funcionario
+    WHERE id_funcionario = p_id_funcionario;
+
+   
+
+   
+    IF v_salario <= 3000 THEN
+        p_resultado := 'Salário abaixo da média';
+    ELSIF v_salario > 3000 AND v_salario <= 4000 THEN
+        p_resultado := 'Salário na média';
+   	ELSIF  v_salario > 4000 THEN
+	   p_resultado := 'Salário acima da média';
+   ELSE 
+        p_resultado := 'Funcionario não encontrado';
+    END IF;
+
+END;
+$$;
+CALL sp_avaliar_salario(01, NULL); 
+
+--Pedro Henrique de Almeida Rocha INI3

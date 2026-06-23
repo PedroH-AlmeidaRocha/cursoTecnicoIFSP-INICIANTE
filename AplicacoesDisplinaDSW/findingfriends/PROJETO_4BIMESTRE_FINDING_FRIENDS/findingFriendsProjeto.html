@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <title>Finding Friends</title>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="Imagens/icone_jogo.png">
+    <link rel="stylesheet" href="estiloJogo.css">
+</head>
+
+<body>
+    <script>
+        let vidas = 3;
+        let dimensao = 5;
+        let classe = null;
+        let qtdPeixes = 3;
+        let qtdLixo = 3;
+        let qtdAnzol = 0;
+        // agora o nível é recuperado do localStorage
+        let nivel = parseInt(localStorage.getItem("nivelJogo")) || 1;
+
+        let titulo = document.createElement("h1");
+
+        //  Define as regras do jogo conforme o nível escolhido
+        switch (nivel) {
+            case 1:
+                titulo.id = "facil";
+                classe = "facil";
+                titulo.textContent = "Nível Fácil";
+                break;
+            case 2:
+                dimensao += 2;
+                qtdLixo += 2;
+                qtdAnzol++;
+                titulo.id = "medio";
+                classe = "medio";
+                titulo.textContent = "Nível Médio";
+                break;
+            case 3:
+                dimensao += 5;
+                qtdPeixes--;
+                qtdLixo += 3;
+                qtdAnzol += 2;
+                titulo.id = "dificil";
+                classe = "dificil";
+                titulo.textContent = "Nível Difícil";
+                break;
+        }
+
+        // --- novo: elemento contador de peixes ---
+        function criarContador() {
+            const contador = document.createElement("div");
+            contador.id = "contadorPeixes";
+            contador.innerHTML = `
+                <span class="iconePeixe">🐟</span>
+                <span class="textoContador"><span id="peixesAtuais">0</span> / <span id="peixesTotal">${qtdPeixes}</span></span>
+            `;
+            document.body.appendChild(contador);
+        }
+
+        function atualizarContador() {
+            const at = document.getElementById("peixesAtuais");
+            if (at) at.textContent = peixes;
+        }
+        // --- fim contador ---
+
+        let posicaoYPeixe = [];
+        let posicoesCabeca = [];
+        let posicoesTronco = [];
+        let posicoesCauda = [];
+        while (posicoesCabeca.length < qtdPeixes) {
+            let y = Math.floor(Math.random() * dimensao);
+            if (!posicaoYPeixe.includes(y)) {
+                posicaoYPeixe.push(y);
+                let x = Math.floor(Math.random() * (dimensao - 2));
+                let posicaoCabeca = y + ":" + x;
+                let posicaoTronco = y + ":" + (x + 1);
+                let posicaoCauda = y + ":" + (x + 2);
+                posicoesCabeca.push(posicaoCabeca);
+                posicoesTronco.push(posicaoTronco);
+                posicoesCauda.push(posicaoCauda);
+            }
+        }
+
+        function naoEstahPosicaoPeixe(posicao) {
+            if (!posicoesCabeca.includes(posicao) && !posicoesTronco.includes(posicao) && !posicoesCauda.includes(posicao)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        let posicoesLixo = [];
+        while (posicoesLixo.length < qtdLixo) {
+            let y = Math.floor(Math.random() * dimensao);
+            let x = Math.floor(Math.random() * dimensao);
+            let posicaoLixo = y + ":" + x;
+            if (!posicoesLixo.includes(posicaoLixo) && naoEstahPosicaoPeixe(posicaoLixo)) {
+                posicoesLixo.push(posicaoLixo);
+            }
+        }
+
+        let posicoesAnzol = [];
+        if (qtdAnzol != 0) {
+            while (posicoesAnzol.length < qtdAnzol) {
+                let y = Math.floor(Math.random() * dimensao);
+                let x = Math.floor(Math.random() * dimensao);
+                let posicaoAnzol = y + ":" + x;
+                if (!posicoesAnzol.includes(posicaoAnzol) && !posicoesLixo.includes(posicaoAnzol) && naoEstahPosicaoPeixe(posicaoAnzol)) {
+                    posicoesAnzol.push(posicaoAnzol);
+                }
+            }
+        }
+
+        let peixesEncontrados = new Array(qtdPeixes);
+        for (let i = 0; i < qtdPeixes; i++) {
+            peixesEncontrados[i] = 0;
+        }
+        let peixes = 0;
+
+        document.body.appendChild(titulo);
+
+        // criar o contador e já mostrar estado inicial
+        criarContador();
+        atualizarContador();
+
+        let tabela = document.createElement("table");
+        for (let i = 0; i < dimensao; i++) {
+            let linha = document.createElement("tr");
+            for (let y = 0; y < dimensao; y++) {
+                let botao = document.createElement("td");
+                botao.className = "padrao " + classe;
+                let posicaoBotao = i + ":" + y;
+
+                botao.tipo = "emBranco";
+                botao.tipo = posicoesLixo.includes(posicaoBotao) ? "lixo" : botao.tipo;
+                botao.tipo = posicoesAnzol.includes(posicaoBotao) ? "anzol" : botao.tipo;
+                botao.tipo = posicoesCabeca.includes(posicaoBotao) ? "cabeca" : botao.tipo;
+                botao.tipo = posicoesTronco.includes(posicaoBotao) ? "tronco" : botao.tipo;
+                botao.tipo = posicoesCauda.includes(posicaoBotao) ? "cauda" : botao.tipo;
+
+                function somarPeixe() {
+                    let linhaBotao = parseInt(posicaoBotao.split(":")[0]);
+                    let indice = posicaoYPeixe.indexOf(linhaBotao);
+                    peixesEncontrados[indice] += 1;
+                    if (peixesEncontrados[indice] == 3) {
+                        peixes += 1;
+                        atualizarContador(); // atualiza o contador quando um peixe for completado
+                    }
+                }
+
+                function impressaoSaida() {
+                    if (vidas == 0 || peixes == qtdPeixes) {
+                        if (vidas == 0) {
+                            alert("Você perdeu!");
+                        } else {
+                            alert("Você encontrou o(s) seu(s) amigo(s)!");
+                        }
+                        let confirmacao = null;
+                        while (confirmacao === null) {
+                            confirmacao = prompt("Deseja recomeçar?\nSim - 1\nNão - Qualquer outro comando", "");
+                        }
+
+                        let botoesNClicados = document.querySelectorAll("td");
+                        botoesNClicados.forEach((botao) => {
+                            botao.clicado = true;
+                            botao.style.cursor = "auto";
+                        });
+                        let campo = document.createElement("div");
+                        campo.className = "campo";
+                        let carregando = document.createElement("div");
+                        carregando.className = "carregando";
+                        campo.appendChild(carregando);
+                        document.body.appendChild(campo);
+                        if (confirmacao == 1) {
+                            setTimeout(() => { window.location.reload(true); }, 1000);
+                        } else {
+                            setTimeout(() => { window.close(); }, 1000);
+                        }
+                    }
+                }
+
+                botao.addEventListener("click", () => {
+                    if (botao.clicado) return;
+                    botao.clicado = true;
+                    switch (botao.tipo) {
+                        case "lixo":
+                            botao.className = "lixo " + classe;
+                            vidas--;
+                            alert("Lixo! Você tem " + vidas + " vida(s) restante(s)");
+                            break;
+                        case "anzol":
+                            botao.className = "anzol " + classe;
+                            vidas = 0;
+                            alert("Anzol! Você foi capturado(a)!");
+                            break;
+                        case "cabeca":
+                            botao.className = "cabeca " + classe;
+                            somarPeixe();
+                            break;
+                        case "tronco":
+                            botao.className = "tronco " + classe;
+                            somarPeixe();
+                            break;
+                        case "cauda":
+                            botao.className = "cauda " + classe;
+                            somarPeixe();
+                            break;
+                        default:
+                            botao.className = "emBranco " + classe;
+                    }
+                    impressaoSaida();
+                });
+                linha.appendChild(botao);
+            }
+            tabela.appendChild(linha);
+        }
+        document.body.appendChild(tabela);
+    </script>
+</body>
+
+</html>
